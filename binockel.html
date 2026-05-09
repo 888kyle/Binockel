@@ -423,7 +423,10 @@ function scoreInput(ri, type, pid, pname) {
     '<div class="sheet-pip"></div>' +
     '<div class="sheet-title">'+label+'</div>' +
     '<div class="sheet-sub">'+sublabel+'</div>' +
-    '<input class="ni" id="si" type="number" inputmode="numeric" placeholder="0" value="'+(cur!==undefined?cur:'')+'" onkeydown="if(event.key===\'Enter\')saveScore('+ri+',\''+type+'\',\''+pid+'\')">' +
+    '<div style="display:flex;gap:10px;align-items:center">' +
+    '<button id="si-sign" onclick="toggleSign()" style="flex-shrink:0;width:52px;height:72px;border-radius:10px;border:1px solid var(--border);background:var(--cream4);color:var(--cream);font-size:26px;font-weight:300;cursor:pointer;font-family:var(--ff)">'+((cur!==undefined&&cur<0)?'−':'+')+'</button>' +
+    '<input class="ni" id="si" type="number" inputmode="numeric" placeholder="0" value="'+(cur!==undefined?Math.abs(cur):'')+'" style="flex:1" onkeydown="if(event.key===\'Enter\')saveScore('+ri+',\''+type+'\',\''+pid+'\')">' +
+    '</div>' +
     '<div class="btn-row">' +
     '<button class="btn btn-ghost" style="flex:1" onclick="closeOverlay()">Abbrechen</button>' +
     '<button class="btn btn-p" style="flex:2" onclick="saveScore('+ri+',\''+type+'\',\''+pid+'\')">Speichern</button>' +
@@ -432,6 +435,13 @@ function scoreInput(ri, type, pid, pname) {
   setTimeout(function(){ var i=document.getElementById('si'); if(i){i.focus();i.select();} },320);
 }
 
+function toggleSign() {
+  var btn = document.getElementById('si-sign');
+  var isNeg = btn.textContent === '−';
+  btn.textContent = isNeg ? '+' : '−';
+  btn.style.color = isNeg ? 'var(--cream)' : 'var(--red)';
+  btn.style.borderColor = isNeg ? 'var(--border)' : 'rgba(217,94,94,0.4)';
+}
 function parseScore(v) {
   if (v===''||v===null||v===undefined) return undefined;
   var n = parseInt(v, 10);
@@ -440,8 +450,12 @@ function parseScore(v) {
 function saveScore(ri, type, pid) {
   var g = cg(); if (!g) return;
   var v = document.getElementById('si').value;
+  var signBtn = document.getElementById('si-sign');
+  var neg = signBtn && signBtn.textContent === '−';
   var r = g.rounds[ri];
   var n = parseScore(v);
+  if (n !== undefined && neg) n = -Math.abs(n);
+  if (n !== undefined && !neg) n = Math.abs(n);
   if (type==='ans') {
     r.ans = n;
   } else {
