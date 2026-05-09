@@ -64,7 +64,11 @@ html,body{height:100%;background:var(--bg);color:var(--cream);font-family:var(--
 .badge-on{background:rgba(114,196,122,.2);color:var(--green)}
 .badge-off{background:var(--cream4);color:var(--muted)}
 .gcard-info{font-size:12px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap}
-.empty{text-align:center;padding:60px 30px;color:var(--muted)}
+.gcard-actions{display:flex;gap:8px;margin-top:11px;border-top:1px solid var(--border);padding-top:11px}
+.gcard-act{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;padding:6px 12px;border-radius:6px;cursor:pointer;border:none;font-family:var(--fu);transition:opacity .15s}
+.gcard-act:active{opacity:.7}
+.gcard-act-share{background:var(--gold-dim);color:var(--gold)}
+.gcard-act-del{background:var(--red-dim);color:var(--red)}
 .empty-icon{font-size:50px;margin-bottom:14px}
 .empty-t{font-family:var(--ff);font-size:20px;color:var(--cream2);margin-bottom:8px}
 .empty-s{font-size:13px;line-height:1.6}
@@ -231,6 +235,10 @@ function home() {
     return '<div class="gcard" onclick="openGame(\''+g.id+'\')">' +
       '<div class="gcard-top"><div class="gcard-name">'+esc(g.name)+'</div>'+badge+'</div>' +
       '<div class="gcard-info"><span>📅 '+d+'</span><span>🎴 '+g.rounds.length+' Runden</span><span>👥 '+g.players.map(function(p){return esc(p.n);}).join(' · ')+'</span></div>' +
+      '<div class="gcard-actions" onclick="event.stopPropagation()">' +
+      '<button class="gcard-act gcard-act-share" onclick="shareGameText(\''+g.id+'\')">↗ Teilen</button>' +
+      '<button class="gcard-act gcard-act-del" onclick="deleteGame(\''+g.id+'\')">✕ Löschen</button>' +
+      '</div>' +
       '</div>';
   }).join('');
 }
@@ -416,14 +424,20 @@ function scoreInput(ri, type, pid, pname) {
   setTimeout(function(){ var i=document.getElementById('si'); if(i){i.focus();i.select();} },320);
 }
 
+function parseScore(v) {
+  if (v===''||v===null||v===undefined) return undefined;
+  var n = parseInt(v, 10);
+  return isNaN(n) ? undefined : n;
+}
 function saveScore(ri, type, pid) {
   var g = cg(); if (!g) return;
   var v = document.getElementById('si').value;
   var r = g.rounds[ri];
+  var n = parseScore(v);
   if (type==='ans') {
-    r.ans = v===''?undefined:parseInt(v)||0;
+    r.ans = n;
   } else {
-    if (v==='') delete r[type][pid]; else r[type][pid]=parseInt(v)||0;
+    if (n===undefined) delete r[type][pid]; else r[type][pid]=n;
   }
   save(); closeOverlay(); renderGame();
 }
@@ -524,8 +538,105 @@ function showSum() {
     '<div class="pay-card">'+payHtml+'</div>' +
     '<div class="sum-btns">' +
     '<button class="btn btn-ghost" style="flex:1" onclick="renderGame()">Zur Tabelle</button>' +
+    '<button class="btn btn-ghost" style="flex:1" onclick="shareGameText(\''+g.id+'\')">↗ Teilen</button>' +
     '<button class="btn btn-p" style="flex:1" onclick="home()">Startseite</button>' +
     '</div></div>';
+}
+
+/* ===== DELETE GAME ===== */
+function deleteGame(id) {
+  var g = S.games.find(function(g){ return g.id===id; });
+  if (!g) return;
+  document.getElementById('sheet').innerHTML =
+    '<div class="sheet-pip"></div>' +
+    '<div class="sheet-title">Spiel löschen?</div>' +
+    '<div class="sheet-sub">„'+esc(g.name)+'" wird unwiderruflich gelöscht.</div>' +
+    '<div class="btn-row">' +
+    '<button class="btn btn-ghost" style="flex:1" onclick="closeOverlay()">Abbrechen</button>' +
+    '<button class="btn btn-danger" style="flex:1" onclick="confirmDelete(\''+id+'\')">Löschen</button>' +
+    '</div>';
+  openOverlay();
+}
+function confirmDelete(id) {
+  S.games = S.games.filter(function(g){ return g.id!==id; });
+  save(); closeOverlay(); home();
+}
+
+/* ===== SHARE / EXPORT ===== */
+function buildShareText(id) {
+  var g = S.games.find(function(g){ return g.id===id; });
+  if (!g) return '';
+  var d = new Date(g.ts).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
+  var lines = [];
+  lines.push('🃏 Binockel – '+g.name);
+  lines.push('📅 '+d+' · '+g.rounds.length+' Runden');
+  lines.push('');
+
+  // Column widths
+  var COL = 7;
+  var header = '      ';
+  g.players.forEach(function(p){
+    header += p.n.substring(0,COL).padStart(COL);
+  });
+  lines.push(header);
+  lines.push('─'.repeat(header.length));
+
+  g.rounds.forEach(function(r,ri){
+    var rzLine = ('R'+(ri+1)+' Rz').padEnd(6);
+    var spLine = ('R'+(ri+1)+' Sp').padEnd(6);
+    g.players.forEach(function(p){
+      var rv = r.rz[p.id]; var sv = r.sp[p.id];
+      rzLine += (rv===undefined?'–':String(rv)).padStart(COL);
+      spLine += (sv===undefined?'–':String(sv)).padStart(COL);
+    });
+    lines.push(rzLine);
+    lines.push(spLine);
+  });
+
+  lines.push('─'.repeat(header.length));
+  var tots = calcTotals(g);
+  var totLine = 'Σ     ';
+  g.players.forEach(function(p){
+    var t = tots[p.id]||0;
+    totLine += (t>0?'+':'')+t;
+    totLine = totLine.padEnd(6 + g.players.indexOf(p)*COL + COL);
+  });
+  // simpler total line
+  var totLine2 = '🏁 Gesamt: '+g.players.map(function(p){
+    var t=tots[p.id]||0; return p.n+': '+(t>0?'+':'')+t;
+  }).join(' | ');
+  lines.push(totLine2);
+
+  var ranked = g.players.map(function(p){return {n:p.n,t:tots[p.id]||0};}).sort(function(a,b){return b.t-a.t;});
+  var settle = calcSettle(ranked, g.pv);
+  if (settle.length>0) {
+    lines.push('');
+    lines.push('💰 Abrechnung ('+g.pv.toString().replace('.',',')+' ct/Pkt):');
+    settle.forEach(function(s){
+      lines.push('  '+s.from+' → '+s.to+': '+fmt(s.amt));
+    });
+  } else {
+    lines.push('');
+    lines.push('🎉 Alle gleich – keine Zahlungen!');
+  }
+  lines.push('');
+  lines.push('📱 Binockel App: https://888kyle.github.io/Binockel/');
+  return lines.join('\n');
+}
+
+function shareGameText(id) {
+  var text = buildShareText(id);
+  if (navigator.share) {
+    navigator.share({ text: text }).catch(function(){});
+  } else {
+    navigator.clipboard && navigator.clipboard.writeText(text).then(function(){
+      alert('Spielstand in Zwischenablage kopiert!');
+    }).catch(function(){
+      var t=document.createElement('textarea'); t.value=text;
+      document.body.appendChild(t); t.select(); document.execCommand('copy');
+      document.body.removeChild(t); alert('Spielstand kopiert!');
+    });
+  }
 }
 
 /* ===== CALC ===== */
@@ -555,7 +666,7 @@ function calcSettle(ranked, pv) {
 function openOverlay(){ document.getElementById('overlay').classList.add('on'); }
 function closeOverlay(){
   document.getElementById('overlay').classList.remove('on');
-  if(S.cur){ var g=cg(); if(g){ renderGhdr(g); renderGbody(g); } }
+  if(S.cur){ var g=cg(); if(g&&document.getElementById('s-game').classList.contains('on')){ renderGhdr(g); renderGbody(g); } }
 }
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeOverlay(); }
 
