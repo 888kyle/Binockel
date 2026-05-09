@@ -280,7 +280,7 @@ function createGame() {
   var pinputs = document.querySelectorAll('#ng-players .prow input');
   var players = Array.from(pinputs).map(function(inp,i){ return {id:uid(), n: inp.value.trim()||(('Spieler '+(i+1)))}; });
   var pv = parseFloat(document.getElementById('ng-pv').value) || 0.5;
-  var g = { id:uid(), name:name, ts:Date.now(), players:players, pv:pv, rounds:[], done:false };
+  var g = { id:uid(), name:name, ts:Date.now(), players:players, pv:pv, rounds:[], done:false, activeIdx:0 };
   S.games.push(g);
   S.cur = g.id;
   save();
@@ -320,11 +320,12 @@ function renderGhdr(g) {
 }
 
 function renderGbody(g) {
-  var ap = g.rounds.length % g.players.length;
+  var ap = g.done ? -1 : (g.activeIdx !== undefined ? g.activeIdx : g.rounds.length % g.players.length);
   var thead = '<thead><tr><th class="rd-col">#</th><th class="ans-col">Ans.</th>';
   g.players.forEach(function(p,i){
     var act = !g.done && i===ap;
-    thead += '<th class="p-col'+(act?' a-col':'')+'">'+esc(p.n)+(act?'<span class="active-dot">● dran</span>':'')+'</th>';
+    var clickable = !g.done && !act;
+    thead += '<th class="p-col'+(act?' a-col':'')+'"'+(clickable?' onclick="setActivePlayer('+i+')" style="cursor:pointer" title="Als aktiven Spieler setzen"':'')+'>'+esc(p.n)+(act?'<span class="active-dot">● dran</span>':'')+'</th>';
   });
   thead += '</tr></thead>';
 
@@ -389,9 +390,16 @@ function renderGfab(g) {
   }
 }
 
+function setActivePlayer(i) {
+  var g = cg(); if (!g || g.done) return;
+  g.activeIdx = i; save(); renderGame();
+}
+
 function addRound() {
   var g = cg(); if (!g||g.done) return;
   g.rounds.push({rz:{}, sp:{}, ans:undefined});
+  var cur = g.activeIdx !== undefined ? g.activeIdx : (g.rounds.length - 1) % g.players.length;
+  g.activeIdx = (cur + 1) % g.players.length;
   save(); renderGame();
   setTimeout(function(){ var b=document.getElementById('g-body'); b.scrollTop=b.scrollHeight; },60);
 }
