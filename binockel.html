@@ -9,52 +9,37 @@
 <title>Binockel</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #0d1a10;
-  --bg2: #111f14;
-  --surface: #162019;
-  --surface2: #1d2b20;
-  --border: #2a3d2d;
-  --border2: #3a5040;
-  --gold: #c9a84c;
-  --gold-dim: rgba(201,168,76,0.15);
-  --gold-glow: rgba(201,168,76,0.08);
-  --cream: #f0e8d5;
-  --cream2: rgba(240,232,213,0.65);
-  --cream3: rgba(240,232,213,0.12);
-  --cream4: rgba(240,232,213,0.06);
-  --red: #d95e5e;
-  --red-dim: rgba(217,94,94,0.15);
-  --green: #72c47a;
-  --muted: #6a8570;
-  --r: 12px;
-  --rs: 8px;
-  --ff: 'Playfair Display', Georgia, serif;
-  --fu: 'DM Sans', system-ui, sans-serif;
+:root{
+  --bg:#0d1a10;--bg2:#111f14;--surface:#162019;--surface2:#1d2b20;
+  --border:#2a3d2d;--border2:#3a5040;
+  --gold:#c9a84c;--gold-dim:rgba(201,168,76,.15);--gold-glow:rgba(201,168,76,.08);
+  --cream:#f0e8d5;--cream2:rgba(240,232,213,.65);--cream3:rgba(240,232,213,.12);--cream4:rgba(240,232,213,.06);
+  --red:#d95e5e;--red-dim:rgba(217,94,94,.15);--green:#72c47a;--muted:#6a8570;
+  --r:12px;--rs:8px;--ff:'Playfair Display',Georgia,serif;--fu:'DM Sans',system-ui,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;background:var(--bg);color:var(--cream);font-family:var(--fu);font-size:15px;line-height:1.5;overscroll-behavior:none}
-.app{max-width:480px;margin:0 auto;min-height:100vh;min-height:100dvh;position:relative}
+.app{max-width:480px;margin:0 auto;min-height:100vh;min-height:100dvh}
 .screen{display:none;flex-direction:column;height:100vh;height:100dvh}
 .screen.on{display:flex}
 .scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
 
-/* HEADER */
+/* HDR */
 .hdr{padding:max(env(safe-area-inset-top),18px) 18px 14px;background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0}
 .hdr-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.logo{font-family:var(--ff);font-size:26px;font-weight:700;color:var(--gold);letter-spacing:-0.5px}
+.logo{font-family:var(--ff);font-size:26px;font-weight:700;color:var(--gold);letter-spacing:-.5px}
 .logo-sub{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:1px}
 
-/* BUTTONS */
+/* BTNS */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 18px;border-radius:var(--rs);border:none;font-family:var(--fu);font-size:14px;font-weight:500;cursor:pointer;transition:opacity .15s,transform .1s;-webkit-user-select:none;user-select:none}
-.btn:active{transform:scale(0.97);opacity:.85}
+.btn:active{transform:scale(.97);opacity:.85}
 .btn-p{background:var(--gold);color:#0d1a10;font-size:15px;font-weight:600;width:100%;padding:15px}
 .btn-ghost{background:var(--cream4);color:var(--cream);border:1px solid var(--border)}
-.btn-danger{background:var(--red-dim);color:var(--red);border:1px solid rgba(217,94,94,0.3)}
+.btn-danger{background:var(--red-dim);color:var(--red);border:1px solid rgba(217,94,94,.3)}
 .btn-icon{width:34px;height:34px;padding:0;border-radius:50%;font-size:16px;background:var(--cream4);color:var(--cream2);border:1px solid var(--border);flex-shrink:0}
 .btn-back{font-size:13px;color:var(--gold);cursor:pointer;display:flex;align-items:center;gap:4px;-webkit-user-select:none;user-select:none;white-space:nowrap}
 
-/* HOME */
+/* CARDS */
 .glist{padding:14px;display:flex;flex-direction:column;gap:10px}
 .gcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:15px;cursor:pointer;transition:border-color .2s,background .15s}
 .gcard:active{background:var(--surface2);border-color:var(--gold)}
@@ -63,6 +48,12 @@ html,body{height:100%;background:var(--bg);color:var(--cream);font-family:var(--
 .badge{font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap;flex-shrink:0}
 .badge-on{background:rgba(114,196,122,.2);color:var(--green)}
 .badge-off{background:var(--cream4);color:var(--muted)}
+.gcard.done{background:#111a13;border-color:#222e24;opacity:.82}
+.gcard.done .gcard-name{color:var(--cream2)}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+input[type=number]{-moz-appearance:textfield}
+.sv.struck{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:2px}
 .gcard-info{font-size:12px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap}
 .gcard-actions{display:flex;gap:8px;margin-top:11px;border-top:1px solid var(--border);padding-top:11px}
 .gcard-act{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;padding:6px 12px;border-radius:6px;cursor:pointer;border:none;font-family:var(--fu);transition:opacity .15s}
@@ -73,14 +64,22 @@ html,body{height:100%;background:var(--bg);color:var(--cream);font-family:var(--
 .empty-t{font-family:var(--ff);font-size:20px;color:var(--cream2);margin-bottom:8px}
 .empty-s{font-size:13px;line-height:1.6}
 
-/* GAME HEADER */
+/* SESSION SCREEN */
+.sess-hdr{padding:max(env(safe-area-inset-top),16px) 14px 12px;background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0}
+.sess-hdr-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.sess-title{font-family:var(--ff);font-size:20px;font-weight:700;flex:1;text-align:center;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sess-meta{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.pv-group{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.pv-input{background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--cream);font-family:var(--fu);font-size:14px;width:62px;padding:5px 8px;text-align:right}
+.pv-input:focus{outline:none;border-color:var(--gold)}
+.games-sec{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);padding:14px 14px 8px}
+
+/* GAME HDR */
 .ghdr{padding:max(env(safe-area-inset-top),16px) 14px 0;background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0}
 .ghdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:8px}
 .gtitle{font-family:var(--ff);font-size:19px;font-weight:600;flex:1;text-align:center;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ghdr-settings{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-top:1px solid var(--border);gap:8px}
-.pv-group{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
-.pv-input{background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--cream);font-family:var(--fu);font-size:14px;width:62px;padding:5px 8px;text-align:right}
-.pv-input:focus{outline:none;border-color:var(--gold)}
+.gsess-label{font-size:11px;color:var(--muted);text-align:center;padding-bottom:6px}
 
 /* TABLE */
 .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -88,7 +87,7 @@ html,body{height:100%;background:var(--bg);color:var(--cream);font-family:var(--
 .tbl th{background:var(--surface);padding:10px 7px;text-align:center;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:2px solid var(--border);white-space:nowrap;position:sticky;top:0;z-index:5}
 .tbl th.p-col{min-width:70px}
 .tbl th.ans-col{width:46px}
-.tbl th.rd-col{width:28px}
+.tbl th.rd-col{width:30px}
 .tbl th.a-col{background:var(--gold-dim)!important;color:var(--gold)!important}
 .tbl td{padding:8px 6px;text-align:center;border-bottom:1px solid rgba(42,61,45,.5);vertical-align:middle}
 .tbl td.p-col{min-width:70px}
@@ -103,23 +102,24 @@ html,body{height:100%;background:var(--bg);color:var(--cream);font-family:var(--
 .row-lbl{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 5px;border-radius:4px}
 .row-lbl.rz{color:#6b9ae0;background:rgba(107,154,224,.1)}
 .row-lbl.sp{color:var(--green);background:rgba(114,196,122,.1)}
-.rnum{font-size:11px;color:var(--muted);font-weight:600}
+.rnum{font-size:11px;color:var(--muted);font-weight:600;display:block}
+.del-r{display:block;font-size:13px;font-weight:700;color:var(--red);cursor:pointer;line-height:1;margin-bottom:2px;opacity:.7}
+.del-r:active{opacity:1}
 .sv{font-size:15px;font-weight:500}
 .sv.e{color:var(--border2)}
 .sv.pos{color:var(--cream)}
 .sv.neg{color:var(--red)}
+.sv.zero{color:var(--muted);font-style:italic}
 .sv.ans{font-size:14px;color:var(--gold);font-weight:600}
 .totals-row td{background:var(--surface)!important;padding:12px 6px;border-top:2px solid var(--gold)!important;border-bottom:none!important}
 .tv{font-size:16px;font-weight:700;font-family:var(--ff)}
-.tv.pos{color:var(--green)}
-.tv.neg{color:var(--red)}
-.tv.z{color:var(--muted)}
+.tv.pos{color:var(--green)}.tv.neg{color:var(--red)}.tv.z{color:var(--muted)}
 .empty-rounds{text-align:center;padding:40px 14px;color:var(--muted);font-size:13px}
 
 /* FAB */
 .fab{position:sticky;bottom:0;padding:12px 14px;padding-bottom:max(env(safe-area-inset-bottom),14px);background:linear-gradient(transparent,var(--bg) 40%);display:flex;gap:10px;flex-shrink:0}
 
-/* MODAL */
+/* OVERLAY */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:flex-end;justify-content:center}
 .overlay.on{display:flex}
 .sheet{background:var(--surface2);border-radius:20px 20px 0 0;padding:20px;padding-bottom:max(env(safe-area-inset-bottom),24px);width:100%;max-width:480px;border-top:1px solid var(--border);animation:sup .25s ease-out}
@@ -165,23 +165,34 @@ html,body{height:100%;background:var(--bg);color:var(--cream);font-family:var(--
 .nopay{text-align:center;padding:22px;color:var(--muted);font-size:14px}
 .sum-btns{display:flex;gap:10px;padding-bottom:max(env(safe-area-inset-bottom),24px)}
 .active-dot{font-size:8px;color:var(--gold);display:block;margin-top:2px}
+.game-breakdown{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:18px}
+.gb-row{display:flex;align-items:center;padding:11px 14px;border-bottom:1px solid var(--border);gap:10px}
+.gb-row:last-child{border-bottom:none}
+.gb-name{font-size:13px;color:var(--muted);width:70px;flex-shrink:0}
+.gb-scores{display:flex;flex:1;gap:8px;flex-wrap:wrap}
+.gb-score{font-size:13px;font-weight:500;padding:2px 8px;border-radius:4px;background:var(--cream4)}
+.gb-score.pos{color:var(--green)}.gb-score.neg{color:var(--red)}.gb-score.z{color:var(--muted)}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- HOME -->
+<!-- HOME: Sessions list -->
 <div class="screen on" id="s-home">
   <div class="hdr">
     <div class="hdr-row">
-      <div>
-        <div class="logo">Binockel</div>
-        <div class="logo-sub">Spielstand</div>
-      </div>
-      <button class="btn btn-ghost" style="white-space:nowrap;flex-shrink:0" onclick="showNewSheet()">+ Neues Spiel</button>
+      <div><div class="logo">Binockel</div><div class="logo-sub">Spielstand</div></div>
+      <button class="btn btn-ghost" style="white-space:nowrap;flex-shrink:0" onclick="showNewSessionSheet()">+ Neue Session</button>
     </div>
   </div>
-  <div class="scroll"><div class="glist" id="glist"></div></div>
+  <div class="scroll"><div class="glist" id="sess-list"></div></div>
+</div>
+
+<!-- SESSION: Games list -->
+<div class="screen" id="s-session">
+  <div id="sess-hdr-el"></div>
+  <div class="scroll"><div id="sess-games-list"></div></div>
+  <div class="fab" id="sess-fab"></div>
 </div>
 
 <!-- GAME -->
@@ -191,9 +202,14 @@ html,body{height:100%;background:var(--bg);color:var(--cream);font-family:var(--
   <div class="fab" id="g-fab"></div>
 </div>
 
-<!-- SUMMARY -->
+<!-- GAME SUMMARY -->
 <div class="screen" id="s-sum">
   <div class="scroll" id="s-body"></div>
+</div>
+
+<!-- SESSION SUMMARY -->
+<div class="screen" id="s-sess-sum">
+  <div class="scroll" id="ss-body"></div>
 </div>
 
 <!-- OVERLAY -->
@@ -203,148 +219,304 @@ html,body{height:100%;background:var(--bg);color:var(--cream);font-family:var(--
 
 </div>
 <script>
-var S = { games: [], cur: null };
+var S = { sessions: [], curSession: null, curGame: null };
 
+/* ===== STORAGE ===== */
 function load() {
-  try { var d = localStorage.getItem('bnk'); if (d) S = JSON.parse(d); } catch(e) {}
+  try {
+    var d = localStorage.getItem('bnk');
+    if (!d) return;
+    var raw = JSON.parse(d);
+    // Migration: old format had S.games at top level
+    if (raw.games && !raw.sessions) {
+      S.sessions = raw.games.map(function(g) {
+        return {
+          id: g.id, name: g.name, ts: g.ts, done: g.done, endTs: g.endTs||null,
+          pv: g.pv||0.5, players: g.players||[],
+          games: [{ id: uid(), name: 'Spiel 1', ts: g.ts, done: g.done, endTs: g.endTs||null,
+                    rounds: g.rounds||[], activeIdx: g.activeIdx||0 }]
+        };
+      });
+      S.curSession = null; S.curGame = null;
+      save();
+    } else {
+      S = raw;
+    }
+  } catch(e) {}
 }
-function save() {
-  try { localStorage.setItem('bnk', JSON.stringify(S)); } catch(e) {}
-}
+function save() { try { localStorage.setItem('bnk', JSON.stringify(S)); } catch(e) {} }
 function uid() { return Math.random().toString(36).slice(2) + Date.now().toString(36); }
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function fmt(n) { return (n/100).toFixed(2).replace('.',',') + ' €'; }
-
 function screen(id) {
   document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('on'); });
   document.getElementById('s-'+id).classList.add('on');
 }
 
+/* ===== ACCESSORS ===== */
+function cs() { return S.sessions.find(function(s){ return s.id===S.curSession; }); }
+function cg() {
+  var sess = cs(); if (!sess) return null;
+  return sess.games.find(function(g){ return g.id===S.curGame; });
+}
+
 /* ===== HOME ===== */
 function home() {
-  S.cur = null;
+  S.curSession = null; S.curGame = null;
   screen('home');
-  var el = document.getElementById('glist');
-  if (!S.games.length) {
-    el.innerHTML = '<div class="empty"><div class="empty-icon">🃏</div><div class="empty-t">Noch keine Spiele</div><div class="empty-s">Erstelle dein erstes Binockel-Spiel und halte den Punktestand fest.</div></div>';
+  var el = document.getElementById('sess-list');
+  if (!S.sessions.length) {
+    el.innerHTML = '<div style="text-align:center;padding:60px 30px;color:var(--muted)"><div class="empty-icon">🃏</div><div class="empty-t">Noch keine Sessions</div><div class="empty-s">Erstelle eine Session für deinen Spieleabend. Innerhalb einer Session kannst du mehrere Spiele eintragen.</div></div>';
     return;
   }
-  el.innerHTML = S.games.slice().reverse().map(function(g) {
-    var d = new Date(g.ts).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
-    var badge = g.done ? '<span class="badge badge-off">Beendet</span>' : '<span class="badge badge-on">Aktiv</span>';
-    return '<div class="gcard" onclick="openGame(\''+g.id+'\')">' +
-      '<div class="gcard-top"><div class="gcard-name">'+esc(g.name)+'</div>'+badge+'</div>' +
-      '<div class="gcard-info"><span>📅 '+d+'</span><span>🎴 '+g.rounds.length+' Runden</span><span>👥 '+g.players.map(function(p){return esc(p.n);}).join(' · ')+'</span></div>' +
+  el.innerHTML = S.sessions.slice().reverse().map(function(sess) {
+    var d = new Date(sess.ts).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
+    var doneGames = sess.games.filter(function(g){return g.done;}).length;
+    var badge = sess.done ? '<span class="badge badge-off">Beendet</span>' : '<span class="badge badge-on">Aktiv</span>';
+    return '<div class="gcard'+(sess.done?' done':'')+'" onclick="openSession(\''+sess.id+'\')">' +
+      '<div class="gcard-top"><div class="gcard-name">'+esc(sess.name)+'</div>'+badge+'</div>' +
+      '<div class="gcard-info"><span>📅 '+d+'</span><span>♟️ '+sess.games.length+' Spiele</span><span>👥 '+sess.players.map(function(p){return esc(p.n);}).join(' · ')+'</span></div>' +
       '<div class="gcard-actions" onclick="event.stopPropagation()">' +
-      '<button class="gcard-act gcard-act-share" onclick="shareGameText(\''+g.id+'\')">↗ Teilen</button>' +
-      '<button class="gcard-act gcard-act-del" onclick="deleteGame(\''+g.id+'\')">✕ Löschen</button>' +
-      '</div>' +
-      '</div>';
+      '<button class="gcard-act gcard-act-share" onclick="pdfSessionById(\''+sess.id+'\')">↗ Teilen</button>' +
+      '<button class="gcard-act gcard-act-del" onclick="deleteSession(\''+sess.id+'\')">✕ Löschen</button>' +
+      '</div></div>';
   }).join('');
 }
 
-/* ===== NEW GAME SHEET ===== */
-function showNewSheet() {
+/* ===== NEW SESSION SHEET ===== */
+function showNewSessionSheet() {
   document.getElementById('sheet').innerHTML =
     '<div class="sheet-pip"></div>' +
-    '<div class="sheet-title">Neues Spiel</div>' +
-    '<div class="sheet-sub">Spielname und Spieler festlegen</div>' +
-    '<div class="ig"><label class="lbl">Spielname</label><input class="ti" id="ng-name" type="text" placeholder="z. B. Freitag bei Klaus" maxlength="40"></div>' +
+    '<div class="sheet-title">Neue Session</div>' +
+    '<div class="sheet-sub">Name und Spieler für diesen Spieleabend</div>' +
+    '<div class="ig"><label class="lbl">Session-Name</label><input class="ti" id="ns-name" type="text" placeholder="z. B. Freitag bei Klaus" maxlength="40"></div>' +
     '<div class="ig"><label class="lbl">Spieler</label>' +
-    '<div class="psetup" id="ng-players">' +
+    '<div class="psetup" id="ns-players">' +
     '<div class="prow"><input class="ti" type="text" value="Spieler 1" maxlength="16"><button class="btn-icon" onclick="rmP(this)">✕</button></div>' +
     '<div class="prow"><input class="ti" type="text" value="Spieler 2" maxlength="16"><button class="btn-icon" onclick="rmP(this)">✕</button></div>' +
     '<div class="prow"><input class="ti" type="text" value="Spieler 3" maxlength="16"><button class="btn-icon" onclick="rmP(this)">✕</button></div>' +
     '</div><div class="add-p" onclick="addP()">＋ Spieler hinzufügen</div></div>' +
-    '<div class="ig"><label class="lbl">ct pro Punkt</label><input class="ti" id="ng-pv" type="number" step="0.01" min="0" placeholder="0.50" value="0.50"></div>' +
-    '<button class="btn btn-p" onclick="createGame()" style="margin-top:6px">Spiel starten</button>';
+    '<div class="ig"><label class="lbl">ct pro Punkt</label><input class="ti" id="ns-pv" type="number" step="0.01" min="0" placeholder="0.50" value="0.50"></div>' +
+    '<button class="btn btn-p" onclick="createSession()" style="margin-top:6px">Session starten</button>';
   openOverlay();
-  setTimeout(function(){ document.getElementById('ng-name').focus(); }, 320);
+  setTimeout(function(){ document.getElementById('ns-name').focus(); }, 320);
 }
 
 function addP() {
-  var ps = document.getElementById('ng-players');
+  var ps = document.getElementById('ns-players')||document.getElementById('ng-players'); if(!ps)return;
   var n = ps.children.length + 1;
-  var d = document.createElement('div'); d.className = 'prow';
+  var d = document.createElement('div'); d.className='prow';
   d.innerHTML = '<input class="ti" type="text" value="Spieler '+n+'" maxlength="16"><button class="btn-icon" onclick="rmP(this)">✕</button>';
   ps.appendChild(d);
 }
 function rmP(btn) {
-  var ps = document.getElementById('ng-players');
-  if (ps.children.length <= 2) return;
+  var ps = btn.closest('.psetup'); if(!ps||ps.children.length<=2) return;
   btn.parentElement.remove();
 }
 
+function createSession() {
+  var name = (document.getElementById('ns-name').value.trim())||'Session';
+  var pinputs = document.querySelectorAll('#ns-players .prow input');
+  var players = Array.from(pinputs).map(function(inp,i){ return {id:uid(), n:inp.value.trim()||('Spieler '+(i+1))}; });
+  var pv = parseFloat(document.getElementById('ns-pv').value)||0.5;
+  var sess = { id:uid(), name:name, ts:Date.now(), done:false, pv:pv, players:players, games:[] };
+  S.sessions.push(sess);
+  S.curSession = sess.id;
+  save(); closeOverlay(); openSession(sess.id);
+}
+
+/* ===== SESSION VIEW ===== */
+function openSession(id) {
+  S.curSession = id; S.curGame = null;
+  var sess = cs(); if (!sess) { home(); return; }
+  screen('session');
+  renderSessionHdr(sess);
+  renderSessionGames(sess);
+  renderSessionFab(sess);
+}
+
+function renderSessionHdr(sess) {
+  var el = document.getElementById('sess-hdr-el');
+  el.className = 'sess-hdr';
+  el.innerHTML =
+    '<div class="sess-hdr-top">' +
+    '<div class="btn-back" onclick="home()">← Zurück</div>' +
+    '<div class="sess-title">'+esc(sess.name)+'</div>' +
+    '<button class="btn btn-ghost" style="font-size:12px;padding:7px 11px;white-space:nowrap;flex-shrink:0" onclick="manageSessionPlayers()">Spieler ✎</button>' +
+    '</div>' +
+    '<div class="sess-meta">' +
+    '<div class="pv-group"><span>1 Punkt =</span>' +
+    '<input class="pv-input" type="number" step="0.01" min="0" value="'+sess.pv+'" onchange="updSessPv(this.value)"'+(sess.done?' disabled':'')+'>ct</div>' +
+    (sess.done
+      ? '<button class="btn btn-ghost" style="font-size:12px;padding:7px 12px" onclick="showSessSum()">Gesamtauswertung ›</button>'
+      : '<button class="btn btn-danger" style="font-size:12px;padding:7px 12px" onclick="confirmEndSession()">Session beenden</button>') +
+    '</div>';
+}
+
+function renderSessionGames(sess) {
+  var el = document.getElementById('sess-games-list');
+  var allTots = {};
+  sess.players.forEach(function(p){ allTots[p.id]=0; });
+  sess.games.forEach(function(g){
+    var gt = calcTotals(g, sess.players);
+    sess.players.forEach(function(p){ allTots[p.id]+=(gt[p.id]||0); });
+  });
+
+  var header = '<div class="games-sec">Spiele ('+(sess.games.length)+')</div>';
+  if (!sess.games.length) {
+    el.innerHTML = header + '<div style="text-align:center;padding:30px 14px;color:var(--muted);font-size:13px">Noch keine Spiele — tippe auf „+ Neues Spiel"</div>';
+    return;
+  }
+
+  var cards = sess.games.map(function(g, gi) {
+    var gt = calcTotals(g, sess.players);
+    var badge = g.done ? '<span class="badge badge-off">Beendet</span>' : '<span class="badge badge-on">Aktiv</span>';
+    var scores = sess.players.map(function(p){
+      var t=gt[p.id]||0; var cls=t>0?'pos':t<0?'neg':'z';
+      return '<span class="gb-score '+cls+'">'+esc(p.n)+': '+(t>0?'+':'')+t+' Pkt</span>';
+    }).join('');
+    return '<div class="gcard'+(g.done?' done':'')+'" onclick="openGameInSession(\''+g.id+'\')">' +
+      '<div class="gcard-top"><div class="gcard-name">'+esc(g.name)+'</div>'+badge+'</div>' +
+      '<div class="gcard-info"><span>🎴 '+g.rounds.length+' Runden</span></div>' +
+      '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">'+scores+'</div>' +
+      '</div>';
+  }).join('');
+
+  // Running total + live settlement
+  var allRanked = sess.players.map(function(p){return{n:p.n,t:allTots[p.id]||0,id:p.id};}).sort(function(a,b){return b.t-a.t;});
+  var liveSettle = calcSettle(allRanked, sess.pv);
+  var settleHtml = '';
+  if (liveSettle.length > 0) {
+    settleHtml = '<div style="margin-top:10px;border-top:1px solid var(--border);padding-top:10px;display:flex;flex-direction:column;gap:5px">' +
+      liveSettle.map(function(s){
+        return '<div style="display:flex;align-items:center;gap:7px;font-size:13px">' +
+          '<span style="color:var(--cream2)">'+esc(s.from)+'</span>' +
+          '<span style="color:var(--muted)">→</span>' +
+          '<span style="color:var(--gold)">'+esc(s.to)+'</span>' +
+          '<span style="margin-left:auto;font-weight:600;color:var(--green)">'+fmt(s.amt)+'</span>' +
+          '</div>';
+      }).join('') +
+      '</div>';
+  } else if (sess.games.length > 0) {
+    settleHtml = '<div style="margin-top:8px;font-size:12px;color:var(--muted)">🎉 Alle gleich – keine Zahlungen</div>';
+  }
+  var totRow = '<div style="background:var(--surface);border:1px solid var(--gold);border-radius:var(--r);margin:4px 14px 14px;padding:12px 14px">' +
+    '<div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:8px">Aktueller Gesamtstand</div>' +
+    '<div style="display:flex;flex-wrap:wrap;gap:8px">' +
+    sess.players.map(function(p){
+      var t=allTots[p.id]||0; var cls=t>0?'pos':t<0?'neg':'z';
+      return '<span class="gb-score '+cls+'" style="font-size:14px;font-weight:600">'+esc(p.n)+': '+(t>0?'+':'')+t+' Pkt</span>';
+    }).join('') +
+    '</div>' + settleHtml + '</div>';
+
+  el.innerHTML = header + '<div class="glist" style="padding-bottom:0">'+cards+'</div>' + totRow;
+}
+
+function renderSessionFab(sess) {
+  var el = document.getElementById('sess-fab');
+  if (sess.done) {
+    el.innerHTML = '<button class="btn btn-ghost" style="flex:1" onclick="home()">← Startseite</button>' +
+      '<button class="btn btn-p" style="flex:2" onclick="showSessSum()">Gesamtauswertung</button>';
+  } else {
+    el.innerHTML = '<button class="btn btn-p" onclick="showNewGameSheet()">+ Neues Spiel</button>';
+  }
+}
+
+function updSessPv(v) { var s=cs(); if(!s)return; s.pv=parseFloat(v)||0; save(); }
+
+/* ===== NEW GAME WITHIN SESSION ===== */
+function showNewGameSheet() {
+  var sess = cs(); if (!sess) return;
+  var n = sess.games.length + 1;
+  document.getElementById('sheet').innerHTML =
+    '<div class="sheet-pip"></div>' +
+    '<div class="sheet-title">Neues Spiel</div>' +
+    '<div class="sheet-sub">'+esc(sess.name)+'</div>' +
+    '<div class="ig"><label class="lbl">Spielname</label><input class="ti" id="ng-name" type="text" value="Spiel '+n+'" maxlength="40"></div>' +
+    '<button class="btn btn-p" onclick="createGame()" style="margin-top:6px">Starten</button>';
+  openOverlay();
+  setTimeout(function(){ var i=document.getElementById('ng-name'); if(i){i.focus();i.select();} },320);
+}
+
 function createGame() {
-  var name = (document.getElementById('ng-name').value.trim()) || 'Spiel';
-  var pinputs = document.querySelectorAll('#ng-players .prow input');
-  var players = Array.from(pinputs).map(function(inp,i){ return {id:uid(), n: inp.value.trim()||(('Spieler '+(i+1)))}; });
-  var pv = parseFloat(document.getElementById('ng-pv').value) || 0.5;
-  var g = { id:uid(), name:name, ts:Date.now(), players:players, pv:pv, rounds:[], done:false, activeIdx:0 };
-  S.games.push(g);
-  S.cur = g.id;
-  save();
-  closeOverlay();
-  renderGame();
+  var sess = cs(); if (!sess) return;
+  var name = (document.getElementById('ng-name').value.trim())||('Spiel '+(sess.games.length+1));
+  var g = { id:uid(), name:name, ts:Date.now(), done:false, rounds:[], activeIdx:0 };
+  sess.games.push(g);
+  S.curGame = g.id;
+  save(); closeOverlay(); renderGame();
 }
 
 /* ===== GAME ===== */
-function openGame(id) { S.cur = id; renderGame(); }
-function cg() { return S.games.find(function(g){ return g.id === S.cur; }); }
+function openGameInSession(gid) {
+  S.curGame = gid;
+  var g = cg(); if (!g) { openSession(S.curSession); return; }
+  if (g.done) { renderGame(); showSum(); return; }
+  renderGame();
+}
 
 function renderGame() {
-  var g = cg();
-  if (!g) { home(); return; }
+  var sess = cs(); var g = cg();
+  if (!sess||!g) { openSession(S.curSession); return; }
   screen('game');
-  renderGhdr(g);
-  renderGbody(g);
+  renderGhdr(sess, g);
+  renderGbody(sess, g);
   renderGfab(g);
 }
 
-function renderGhdr(g) {
+function renderGhdr(sess, g) {
   var el = document.getElementById('g-hdr');
   el.className = 'ghdr';
   el.innerHTML =
+    '<div style="text-align:center;font-size:11px;color:var(--muted);padding-top:2px;padding-bottom:4px">'+esc(sess.name)+'</div>' +
     '<div class="ghdr-top">' +
-    '<div class="btn-back" onclick="home()">← Zurück</div>' +
+    '<div class="btn-back" onclick="openSession(\''+sess.id+'\')">← Session</div>' +
     '<div class="gtitle">'+esc(g.name)+'</div>' +
     '<button class="btn btn-ghost" style="font-size:12px;padding:7px 11px;white-space:nowrap;flex-shrink:0" onclick="manageSheet()">Spieler ✎</button>' +
     '</div>' +
     '<div class="ghdr-settings">' +
-    '<div class="pv-group"><span>1 Punkt =</span>' +
-    '<input class="pv-input" type="number" step="0.01" min="0" value="'+g.pv+'" onchange="updPv(this.value)"'+(g.done?' disabled':'')+'>ct</div>' +
+    '<div class="pv-group"><span>1 Pkt = '+sess.pv.toString().replace('.',',')+'ct</span></div>' +
     (g.done
       ? '<button class="btn btn-ghost" style="font-size:12px;padding:7px 12px" onclick="showSum()">Auswertung ›</button>'
       : '<button class="btn btn-danger" style="font-size:12px;padding:7px 12px" onclick="confirmEnd()">Beenden</button>') +
     '</div>';
 }
 
-function renderGbody(g) {
-  var ap = g.done ? -1 : (g.activeIdx !== undefined ? g.activeIdx : g.rounds.length % g.players.length);
+function renderGbody(sess, g) {
+  var ap = g.done ? -1 : (g.activeIdx!==undefined ? g.activeIdx : g.rounds.length % sess.players.length);
+  var lastRi = g.rounds.length - 1;
+
   var thead = '<thead><tr><th class="rd-col">#</th><th class="ans-col">Ans.</th>';
-  g.players.forEach(function(p,i){
+  sess.players.forEach(function(p,i){
     var act = !g.done && i===ap;
     var clickable = !g.done && !act;
-    thead += '<th class="p-col'+(act?' a-col':'')+'"'+(clickable?' onclick="setActivePlayer('+i+')" style="cursor:pointer" title="Als aktiven Spieler setzen"':'')+'>'+esc(p.n)+(act?'<span class="active-dot">● dran</span>':'')+'</th>';
+    thead += '<th class="p-col'+(act?' a-col':'')+'"'+(clickable?' onclick="setActivePlayer('+i+')" style="cursor:pointer"':'')+'>'+esc(p.n)+(act?'<span class="active-dot">● dran</span>':'')+'</th>';
   });
   thead += '</tr></thead>';
 
   var tbody = '<tbody>';
   if (!g.rounds.length) {
-    tbody += '<tr><td colspan="'+(2+g.players.length)+'" class="empty-rounds">Noch keine Runden — tippe auf „+ Runde" um zu beginnen</td></tr>';
+    tbody += '<tr><td colspan="'+(2+sess.players.length)+'" class="empty-rounds">Noch keine Runden — tippe auf „+ Runde"</td></tr>';
   }
+
   g.rounds.forEach(function(r,ri){
-    var rap = ri % g.players.length;
-    var ansVal = r.ans !== undefined ? '<span class="sv ans">'+r.ans+'</span>' : '<span class="sv e">–</span>';
+    var rap = ri % sess.players.length;
+    var isLast = ri === lastRi && !g.done;
+    var ansVal = r.ans!==undefined ? '<span class="sv ans">'+r.ans+'</span>' : '<span class="sv e">–</span>';
     var ansTap = !g.done ? 'tap" onclick="scoreInput('+ri+',\'ans\',null,null)' : '"';
 
+    // # cell: show delete button only on last round
+    var numCell = isLast
+      ? '<td class="rd-col" rowspan="2"><span class="del-r" onclick="deleteLastRound()" title="Letzte Runde löschen">−</span><span class="rnum">'+(ri+1)+'</span></td>'
+      : '<td class="rd-col" rowspan="2"><span class="rnum">'+(ri+1)+'</span></td>';
+
     // Row 1: Reizen
-    tbody += '<tr class="rz-row round-top">' +
-      '<td class="rd-col" rowspan="2"><span class="rnum">'+(ri+1)+'</span></td>' +
+    tbody += '<tr class="rz-row round-top">'+numCell+
       '<td class="ans-col '+ansTap+'">'+ansVal+'</td>';
-    g.players.forEach(function(p,pi){
+    sess.players.forEach(function(p,pi){
       var v = r.rz[p.id];
-      var cls = v===undefined?'e':v<0?'neg':'pos';
+      var spIsZero = r.sp[p.id]===0;
+      var cls = spIsZero?'struck':v===undefined?'e':v<0?'neg':'pos';
       var disp = v===undefined?'–':v;
       var act = pi===rap?' a-col':'';
       var tap = !g.done?' tap" onclick="scoreInput('+ri+',\'rz\',\''+p.id+'\',\''+esc(p.n)+'\')"':'"';
@@ -354,9 +526,9 @@ function renderGbody(g) {
 
     // Row 2: Spielen
     tbody += '<tr class="sp-row round-bot"><td class="ans-col"><span class="row-lbl sp">Sp</span></td>';
-    g.players.forEach(function(p,pi){
+    sess.players.forEach(function(p,pi){
       var v = r.sp[p.id];
-      var cls = v===undefined?'e':v<0?'neg':'pos';
+      var cls = v===undefined?'e':v===0?'zero':v<0?'neg':'pos';
       var disp = v===undefined?'–':v;
       var act = pi===rap?' a-col':'';
       var tap = !g.done?' tap" onclick="scoreInput('+ri+',\'sp\',\''+p.id+'\',\''+esc(p.n)+'\')"':'"';
@@ -365,11 +537,11 @@ function renderGbody(g) {
     tbody += '</tr>';
   });
 
-  // Totals
-  var tots = calcTotals(g);
-  var maxT = Math.max.apply(null, g.players.map(function(p){ return tots[p.id]||0; }));
+  // Totals row
+  var tots = calcTotals(g, sess.players);
+  var maxT = Math.max.apply(null, sess.players.map(function(p){ return tots[p.id]||0; }));
   tbody += '<tr class="totals-row"><td colspan="2" style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)">Gesamt</td>';
-  g.players.forEach(function(p){
+  sess.players.forEach(function(p){
     var t = tots[p.id]||0;
     var cls = t>0?'pos':t<0?'neg':'z';
     var crown = (t===maxT&&g.rounds.length>0&&t!==0)?'<br><span style="font-size:14px">👑</span>':'';
@@ -383,42 +555,42 @@ function renderGbody(g) {
 function renderGfab(g) {
   var el = document.getElementById('g-fab');
   if (g.done) {
-    el.innerHTML = '<button class="btn btn-ghost" style="flex:1" onclick="home()">← Startseite</button>' +
-      '<button class="btn btn-p" style="flex:2" onclick="showSum()">Auswertung ansehen</button>';
+    el.innerHTML = '<button class="btn btn-ghost" style="flex:1" onclick="openSession(\''+S.curSession+'\')">← Session</button>' +
+      '<button class="btn btn-p" style="flex:2" onclick="showSum()">Auswertung</button>';
   } else {
-    el.innerHTML = '<button class="btn btn-p" style="flex:1" onclick="addRound()">+ Runde</button>';
+    el.innerHTML = '<button class="btn btn-p" onclick="addRound()">+ Runde</button>';
   }
 }
 
-function setActivePlayer(i) {
-  var g = cg(); if (!g || g.done) return;
-  g.activeIdx = i; save(); renderGame();
-}
+function setActivePlayer(i) { var g=cg(); if(!g||g.done)return; g.activeIdx=i; save(); renderGame(); }
 
 function addRound() {
-  var g = cg(); if (!g||g.done) return;
-  g.rounds.push({rz:{}, sp:{}, ans:undefined});
-  var cur = g.activeIdx !== undefined ? g.activeIdx : (g.rounds.length - 1) % g.players.length;
-  g.activeIdx = (cur + 1) % g.players.length;
+  var sess=cs(); var g=cg(); if(!sess||!g||g.done)return;
+  g.rounds.push({rz:{},sp:{},ans:undefined});
+  var cur = g.activeIdx!==undefined ? g.activeIdx : (g.rounds.length-1) % sess.players.length;
+  g.activeIdx = (cur+1) % sess.players.length;
   save(); renderGame();
   setTimeout(function(){ var b=document.getElementById('g-body'); b.scrollTop=b.scrollHeight; },60);
 }
 
+function deleteLastRound() {
+  var g=cg(); if(!g||g.done||!g.rounds.length)return;
+  g.rounds.pop();
+  var sess=cs();
+  // Step active player back
+  g.activeIdx = ((g.activeIdx||0) - 1 + (sess?sess.players.length:3)) % (sess?sess.players.length:3);
+  save(); renderGame();
+}
+
 /* ===== SCORE INPUT ===== */
 function scoreInput(ri, type, pid, pname) {
-  var g = cg(); if (!g) return;
-  var r = g.rounds[ri];
+  var g=cg(); if(!g)return;
+  var r=g.rounds[ri];
   var cur, label, sublabel;
-  if (type==='ans') {
-    cur = r.ans; label = 'Ansage'; sublabel = 'Runde '+(ri+1)+' · Reizwert';
-  } else if (type==='rz') {
-    cur = r.rz[pid]; label = esc(pname); sublabel = 'Runde '+(ri+1)+' · Reizen';
-  } else {
-    cur = r.sp[pid]; label = esc(pname); sublabel = 'Runde '+(ri+1)+' · Spielen';
-  }
-  var delBtn = cur!==undefined
-    ? '<button class="link-btn" onclick="clearScore('+ri+',\''+type+'\',\''+pid+'\')">Eintrag löschen</button>' : '';
-
+  if(type==='ans'){cur=r.ans;label='Ansage';sublabel='Runde '+(ri+1)+' · Reizwert';}
+  else if(type==='rz'){cur=r.rz[pid];label=esc(pname);sublabel='Runde '+(ri+1)+' · Reizen';}
+  else{cur=r.sp[pid];label=esc(pname);sublabel='Runde '+(ri+1)+' · Spielen';}
+  var delBtn = cur!==undefined ? '<button class="link-btn" onclick="clearScore('+ri+',\''+type+'\',\''+pid+'\')">Eintrag löschen</button>' : '';
   document.getElementById('sheet').innerHTML =
     '<div class="sheet-pip"></div>' +
     '<div class="sheet-title">'+label+'</div>' +
@@ -436,84 +608,78 @@ function scoreInput(ri, type, pid, pname) {
 }
 
 function toggleSign() {
-  var btn = document.getElementById('si-sign');
-  var isNeg = btn.textContent === '−';
-  btn.textContent = isNeg ? '+' : '−';
-  btn.style.color = isNeg ? 'var(--cream)' : 'var(--red)';
-  btn.style.borderColor = isNeg ? 'var(--border)' : 'rgba(217,94,94,0.4)';
+  var btn=document.getElementById('si-sign');
+  var isNeg=btn.textContent==='−';
+  btn.textContent=isNeg?'+':'−';
+  btn.style.color=isNeg?'var(--cream)':'var(--red)';
+  btn.style.borderColor=isNeg?'var(--border)':'rgba(217,94,94,.4)';
 }
 function parseScore(v) {
-  if (v===''||v===null||v===undefined) return undefined;
-  var n = parseInt(v, 10);
-  return isNaN(n) ? undefined : n;
+  if(v===''||v===null||v===undefined)return undefined;
+  var n=parseInt(v,10); return isNaN(n)?undefined:n;
 }
-function saveScore(ri, type, pid) {
-  var g = cg(); if (!g) return;
-  var v = document.getElementById('si').value;
-  var signBtn = document.getElementById('si-sign');
-  var neg = signBtn && signBtn.textContent === '−';
-  var r = g.rounds[ri];
-  var n = parseScore(v);
-  if (n !== undefined && neg) n = -Math.abs(n);
-  if (n !== undefined && !neg) n = Math.abs(n);
-  if (type==='ans') {
-    r.ans = n;
-  } else {
-    if (n===undefined) delete r[type][pid]; else r[type][pid]=n;
-  }
+function saveScore(ri,type,pid) {
+  var g=cg(); if(!g)return;
+  var v=document.getElementById('si').value;
+  var signBtn=document.getElementById('si-sign');
+  var neg=signBtn&&signBtn.textContent==='−';
+  var r=g.rounds[ri];
+  var n=parseScore(v);
+  if(n!==undefined&&neg)n=-Math.abs(n);
+  if(n!==undefined&&!neg)n=Math.abs(n);
+  if(type==='ans'){r.ans=n;}
+  else{if(n===undefined)delete r[type][pid];else r[type][pid]=n;}
   save(); closeOverlay(); renderGame();
 }
-
-function clearScore(ri, type, pid) {
-  var g = cg(); if (!g) return;
-  var r = g.rounds[ri];
-  if (type==='ans') r.ans=undefined; else delete r[type][pid];
+function clearScore(ri,type,pid) {
+  var g=cg(); if(!g)return;
+  var r=g.rounds[ri];
+  if(type==='ans')r.ans=undefined;else delete r[type][pid];
   save(); closeOverlay(); renderGame();
-}
-
-function updPv(v) {
-  var g = cg(); if (!g) return;
-  g.pv = parseFloat(v)||0; save();
 }
 
 /* ===== PLAYER MANAGEMENT ===== */
 function manageSheet() {
-  var g = cg(); if (!g) return;
+  var sess=cs(); if(!sess)return;
   document.getElementById('sheet').innerHTML =
     '<div class="sheet-pip"></div>' +
     '<div class="sheet-title">Spieler</div>' +
-    '<div class="sheet-sub">Namen bearbeiten, hinzufügen oder entfernen</div>' +
+    '<div class="sheet-sub">Gilt für alle Spiele dieser Session</div>' +
     '<div class="psetup" id="mp">'+
-    g.players.map(function(p){
+    sess.players.map(function(p){
       return '<div class="prow" data-id="'+p.id+'"><input class="ti" type="text" value="'+esc(p.n)+'" maxlength="16" oninput="renameP(\''+p.id+'\',this.value)"><button class="btn-icon" onclick="removeP(\''+p.id+'\')">✕</button></div>';
     }).join('')+
     '</div><div class="add-p" onclick="addNewP()">＋ Spieler hinzufügen</div>' +
     '<button class="btn btn-p" style="margin-top:14px" onclick="closeOverlay()">Fertig</button>';
   openOverlay();
 }
+function manageSessionPlayers() { manageSheet(); }
 
-function renameP(pid, val) {
-  var g=cg(); if(!g) return;
-  var p=g.players.find(function(p){return p.id===pid;}); if(p){p.n=val||p.n; save();}
+function renameP(pid,val) {
+  var sess=cs(); if(!sess)return;
+  var p=sess.players.find(function(p){return p.id===pid;}); if(p){p.n=val||p.n;save();}
 }
 function removeP(pid) {
-  var g=cg(); if(!g||g.players.length<=2) return;
-  g.players=g.players.filter(function(p){return p.id!==pid;});
-  g.rounds.forEach(function(r){ delete r.rz[pid]; delete r.sp[pid]; });
-  save(); manageSheet(); renderGame();
+  var sess=cs(); if(!sess||sess.players.length<=2)return;
+  sess.players=sess.players.filter(function(p){return p.id!==pid;});
+  sess.games.forEach(function(g){ g.rounds.forEach(function(r){delete r.rz[pid];delete r.sp[pid];}); });
+  save(); manageSheet();
+  if(document.getElementById('s-game').classList.contains('on'))renderGame();
+  else openSession(sess.id);
 }
 function addNewP() {
-  var g=cg(); if(!g) return;
-  g.players.push({id:uid(), n:'Spieler '+(g.players.length+1)});
-  save(); manageSheet(); renderGame();
+  var sess=cs(); if(!sess)return;
+  sess.players.push({id:uid(),n:'Spieler '+(sess.players.length+1)});
+  save(); manageSheet();
+  if(document.getElementById('s-game').classList.contains('on'))renderGame();
 }
 
-/* ===== FINISH ===== */
+/* ===== FINISH GAME ===== */
 function confirmEnd() {
   document.getElementById('sheet').innerHTML =
     '<div class="sheet-pip"></div>' +
     '<div class="sheet-title">Spiel beenden?</div>' +
-    '<div class="sheet-sub">Das Spiel wird abgeschlossen. Danach können keine Punkte mehr eingetragen werden.</div>' +
+    '<div class="sheet-sub">Danach können keine Punkte mehr eingetragen werden.</div>' +
     '<div class="btn-row">' +
     '<button class="btn btn-ghost" style="flex:1" onclick="closeOverlay()">Weiter spielen</button>' +
     '<button class="btn btn-danger" style="flex:1" onclick="endGame()">Beenden</button>' +
@@ -521,17 +687,40 @@ function confirmEnd() {
   openOverlay();
 }
 function endGame() {
-  var g=cg(); if(!g) return;
+  var g=cg(); if(!g)return;
   g.done=true; g.endTs=Date.now(); save(); closeOverlay(); renderGame();
-  setTimeout(function(){ showSum(); },200);
+  setTimeout(function(){showSum();},200);
 }
 
-/* ===== SUMMARY ===== */
+/* ===== FINISH SESSION ===== */
+function confirmEndSession() {
+  var sess=cs(); if(!sess)return;
+  var active=sess.games.filter(function(g){return !g.done;}).length;
+  var warn=active>0?'<div style="color:var(--red);font-size:13px;margin-bottom:10px">⚠ '+active+' Spiel(e) noch nicht beendet.</div>':'';
+  document.getElementById('sheet').innerHTML =
+    '<div class="sheet-pip"></div>' +
+    '<div class="sheet-title">Session beenden?</div>' +
+    '<div class="sheet-sub">Die Session wird abgeschlossen und die Gesamtabrechnung erstellt.</div>' +
+    warn +
+    '<div class="btn-row">' +
+    '<button class="btn btn-ghost" style="flex:1" onclick="closeOverlay()">Weiter spielen</button>' +
+    '<button class="btn btn-danger" style="flex:1" onclick="endSession()">Beenden</button>' +
+    '</div>';
+  openOverlay();
+}
+function endSession() {
+  var sess=cs(); if(!sess)return;
+  sess.done=true; sess.endTs=Date.now(); save(); closeOverlay();
+  openSession(sess.id);
+  setTimeout(function(){showSessSum();},200);
+}
+
+/* ===== GAME SUMMARY ===== */
 function showSum() {
-  var g=cg(); if(!g) return;
+  var sess=cs(); var g=cg(); if(!sess||!g)return;
   screen('sum');
-  var tots=calcTotals(g);
-  var ranked=g.players.map(function(p){return {n:p.n,t:tots[p.id]||0};}).sort(function(a,b){return b.t-a.t;});
+  var tots=calcTotals(g,sess.players);
+  var ranked=sess.players.map(function(p){return {id:p.id,n:p.n,t:tots[p.id]||0};}).sort(function(a,b){return b.t-a.t;});
   var medals=['🥇','🥈','🥉']; var rankCls=['g','s','b'];
   var rankHtml=ranked.map(function(p,i){
     var cls=p.t>0?'pos':p.t<0?'neg':'z';
@@ -540,133 +729,252 @@ function showSum() {
       '</div><div class="rname">'+esc(p.n)+'</div><div class="rscore '+cls+'">'+
       (p.t>0?'+':'')+p.t+' Pkt</div></div>';
   }).join('');
-
-  var settle=calcSettle(ranked,g.pv);
+  var settle=calcSettle(ranked,sess.pv);
   var payHtml=settle.length===0
-    ? '<div class="nopay">Alle gleich auf – keine Zahlungen nötig 🎉</div>'
+    ? '<div class="nopay">Alle gleich – keine Zahlungen 🎉</div>'
     : settle.map(function(s){
-        return '<div class="pay-row"><div class="pfrom">'+esc(s.from)+'</div>' +
-          '<div class="parrow">→</div><div class="pto">'+esc(s.to)+'</div>' +
-          '<div class="pamount">'+fmt(s.amt)+'</div></div>';
+        return '<div class="pay-row"><div class="pfrom">'+esc(s.from)+'</div><div class="parrow">→</div><div class="pto">'+esc(s.to)+'</div><div class="pamount">'+fmt(s.amt)+'</div></div>';
       }).join('');
-
   document.getElementById('s-body').innerHTML =
     '<div class="sum-hdr"><div class="sum-icon">🏆</div>' +
     '<div class="sum-title">Spielende</div>' +
     '<div class="sum-sub">'+esc(g.name)+' · '+g.rounds.length+' Runden</div></div>' +
     '<div class="sum-sec">' +
     '<div class="sec-title">Rangliste</div><div class="rank-card">'+rankHtml+'</div>' +
-    '<div class="sec-title">Abrechnung ('+g.pv.toString().replace('.',',')+' ct/Pkt)</div>' +
+    '<div class="sec-title">Abrechnung ('+sess.pv.toString().replace('.',',')+' ct/Pkt)</div>' +
     '<div class="pay-card">'+payHtml+'</div>' +
     '<div class="sum-btns">' +
     '<button class="btn btn-ghost" style="flex:1" onclick="renderGame()">Zur Tabelle</button>' +
-    '<button class="btn btn-ghost" style="flex:1" onclick="shareGameText(\''+g.id+'\')">↗ Teilen</button>' +
-    '<button class="btn btn-p" style="flex:1" onclick="home()">Startseite</button>' +
+    '<button class="btn btn-p" style="flex:1" onclick="pdfGame()">↗ Teilen</button>' +
+    '<button class="btn btn-ghost" style="flex:1" onclick="openSession(\''+sess.id+'\')">← Session</button>' +
     '</div></div>';
 }
 
-/* ===== DELETE GAME ===== */
-function deleteGame(id) {
-  var g = S.games.find(function(g){ return g.id===id; });
-  if (!g) return;
+/* ===== SESSION SUMMARY ===== */
+function showSessSum() {
+  var sess=cs(); if(!sess)return;
+  screen('sess-sum');
+  var allTots={};
+  sess.players.forEach(function(p){allTots[p.id]=0;});
+  var breakdownRows='';
+  sess.games.forEach(function(g){
+    if(!g.done)return;
+    var gt=calcTotals(g,sess.players);
+    var scores=sess.players.map(function(p){
+      var t=gt[p.id]||0; var cls=t>0?'pos':t<0?'neg':'z';
+      allTots[p.id]+=t;
+      return '<span class="gb-score '+cls+'">'+esc(p.n)+': '+(t>0?'+':'')+t+' Pkt</span>';
+    }).join('');
+    breakdownRows+='<div class="gb-row"><div class="gb-name">'+esc(g.name)+'</div><div class="gb-scores">'+scores+'</div></div>';
+  });
+
+  var ranked=sess.players.map(function(p){return {id:p.id,n:p.n,t:allTots[p.id]||0};}).sort(function(a,b){return b.t-a.t;});
+  var medals=['🥇','🥈','🥉']; var rankCls=['g','s','b'];
+  var rankHtml=ranked.map(function(p,i){
+    var cls=p.t>0?'pos':p.t<0?'neg':'z';
+    return '<div class="rank-row'+(i===0?' r1':'')+'"><div class="rnk '+(rankCls[i]||'')+'">'+
+      (medals[i]||((i+1)+'.'))+
+      '</div><div class="rname">'+esc(p.n)+'</div><div class="rscore '+cls+'">'+
+      (p.t>0?'+':'')+p.t+' Pkt</div></div>';
+  }).join('');
+  var settle=calcSettle(ranked,sess.pv);
+  var payHtml=settle.length===0
+    ? '<div class="nopay">Alle gleich – keine Zahlungen 🎉</div>'
+    : settle.map(function(s){
+        return '<div class="pay-row"><div class="pfrom">'+esc(s.from)+'</div><div class="parrow">→</div><div class="pto">'+esc(s.to)+'</div><div class="pamount">'+fmt(s.amt)+'</div></div>';
+      }).join('');
+  var doneCount=sess.games.filter(function(g){return g.done;}).length;
+  document.getElementById('ss-body').innerHTML =
+    '<div class="sum-hdr"><div class="sum-icon">🏆</div>' +
+    '<div class="sum-title">Session-Ergebnis</div>' +
+    '<div class="sum-sub">'+esc(sess.name)+' · '+doneCount+' Spiele</div></div>' +
+    '<div class="sum-sec">' +
+    '<div class="sec-title">Gesamtrangliste</div><div class="rank-card">'+rankHtml+'</div>' +
+    '<div class="sec-title">Finale Abrechnung ('+sess.pv.toString().replace('.',',')+' ct/Pkt)</div>' +
+    '<div class="pay-card">'+payHtml+'</div>' +
+    (breakdownRows?'<div class="sec-title">Einzelne Spiele</div><div class="game-breakdown">'+breakdownRows+'</div>':'') +
+    '<div class="sum-btns">' +
+    '<button class="btn btn-ghost" style="flex:1" onclick="openSession(\''+sess.id+'\')">← Zurück</button>' +
+    '<button class="btn btn-p" style="flex:1" onclick="pdfSession()">↗ Teilen</button>' +
+    '<button class="btn btn-ghost" style="flex:1" onclick="home()">Startseite</button>' +
+    '</div></div>';
+}
+
+/* ===== DELETE / SHARE SESSION ===== */
+function deleteSession(id) {
+  var sess=S.sessions.find(function(s){return s.id===id;}); if(!sess)return;
   document.getElementById('sheet').innerHTML =
     '<div class="sheet-pip"></div>' +
-    '<div class="sheet-title">Spiel löschen?</div>' +
-    '<div class="sheet-sub">„'+esc(g.name)+'" wird unwiderruflich gelöscht.</div>' +
+    '<div class="sheet-title">Session löschen?</div>' +
+    '<div class="sheet-sub">„'+esc(sess.name)+'" und alle '+sess.games.length+' Spiele werden unwiderruflich gelöscht.</div>' +
     '<div class="btn-row">' +
     '<button class="btn btn-ghost" style="flex:1" onclick="closeOverlay()">Abbrechen</button>' +
-    '<button class="btn btn-danger" style="flex:1" onclick="confirmDelete(\''+id+'\')">Löschen</button>' +
+    '<button class="btn btn-danger" style="flex:1" onclick="confirmDeleteSession(\''+id+'\')">Löschen</button>' +
     '</div>';
   openOverlay();
 }
-function confirmDelete(id) {
-  S.games = S.games.filter(function(g){ return g.id!==id; });
+function confirmDeleteSession(id) {
+  S.sessions=S.sessions.filter(function(s){return s.id!==id;});
   save(); closeOverlay(); home();
 }
 
-/* ===== SHARE / EXPORT ===== */
-function buildShareText(id) {
-  var g = S.games.find(function(g){ return g.id===id; });
-  if (!g) return '';
-  var d = new Date(g.ts).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
-  var lines = [];
-  lines.push('🃏 Binockel – '+g.name);
+function pdfSessionById(id) {
+  var old=S.curSession; S.curSession=id;
+  pdfSession();
+  S.curSession=old;
+}
+
+/* ===== PDF EXPORT ===== */
+function pdfGame() {
+  var sess=cs(); var g=cg(); if(!sess||!g)return;
+  var tots=calcTotals(g,sess.players);
+  var ranked=sess.players.map(function(p){return{n:p.n,t:tots[p.id]||0};}).sort(function(a,b){return b.t-a.t;});
+  var settle=calcSettle(ranked,sess.pv);
+  var d=new Date(g.ts).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
+
+  var tHead='<tr><th>#</th><th>Ans.</th>'+sess.players.map(function(p){return'<th>'+esc(p.n)+'</th>';}).join('')+'</tr>';
+  var tRows=g.rounds.map(function(r,ri){
+    var rzCells=sess.players.map(function(p){
+      var spZ=r.sp[p.id]===0; var v=r.rz[p.id]===undefined?'–':r.rz[p.id];
+      return'<td>'+(spZ?'<span class="struck">'+v+'</span>':v)+'</td>';
+    }).join('');
+    var spCells=sess.players.map(function(p){
+      var v=r.sp[p.id]; return'<td>'+(v===undefined?'–':v===0?'<span style="color:#999">0</span>':v)+'</td>';
+    }).join('');
+    return'<tr class="rz"><td rowspan="2">'+(ri+1)+'</td><td>'+(r.ans!==undefined?r.ans:'–')+'</td>'+rzCells+'</tr>'+
+           '<tr class="sp"><td><em>Sp</em></td>'+spCells+'</tr>';
+  }).join('');
+  var totCells=sess.players.map(function(p){var t=tots[p.id]||0;return'<td class="'+(t>0?'pos':t<0?'neg':'')+'"><strong>'+(t>0?'+':'')+t+'</strong></td>';}).join('');
+
+  var settleHtml=settle.length===0?'<p style="color:#666">Keine Zahlungen nötig.</p>':settle.map(function(s){
+    return'<div class="pay-line"><span class="from">'+esc(s.from)+'</span><span class="arr">→</span><span class="to">'+esc(s.to)+'</span><span class="amt">'+fmt(s.amt)+'</span></div>';
+  }).join('');
+
+  openPrintWin('🃏 Binockel – '+esc(sess.name)+' / '+esc(g.name), d+' · '+g.rounds.length+' Runden',
+    '<table><thead>'+tHead+'</thead><tbody>'+tRows+'<tr class="tot"><td colspan="2">Gesamt</td>'+totCells+'</tr></tbody></table>'+
+    '<h3>Abrechnung <small>('+sess.pv.toString().replace('.',',')+' ct/Pkt)</small></h3>'+settleHtml);
+}
+
+function pdfSession() {
+  var sess=cs(); if(!sess)return;
+  var allTots={};
+  sess.players.forEach(function(p){allTots[p.id]=0;});
+  var gameRows='';
+  sess.games.forEach(function(g){
+    if(!g.done)return;
+    var gt=calcTotals(g,sess.players);
+    var cells=sess.players.map(function(p){var t=gt[p.id]||0;allTots[p.id]+=t;return'<td class="'+(t>0?'pos':t<0?'neg':'')+'">'+( t>0?'+':'')+t+'</td>';}).join('');
+    gameRows+='<tr><td>'+esc(g.name)+'</td>'+cells+'</tr>';
+  });
+  var totCells=sess.players.map(function(p){var t=allTots[p.id]||0;return'<td class="'+(t>0?'pos':t<0?'neg':'')+'"><strong>'+(t>0?'+':'')+t+'</strong></td>';}).join('');
+  var ranked=sess.players.map(function(p){return{n:p.n,t:allTots[p.id]||0};}).sort(function(a,b){return b.t-a.t;});
+  var settle=calcSettle(ranked,sess.pv);
+  var settleHtml=settle.length===0?'<p style="color:#666">Keine Zahlungen nötig.</p>':settle.map(function(s){
+    return'<div class="pay-line"><span class="from">'+esc(s.from)+'</span><span class="arr">→</span><span class="to">'+esc(s.to)+'</span><span class="amt">'+fmt(s.amt)+'</span></div>';
+  }).join('');
+  var d=new Date(sess.ts).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
+  var doneCount=sess.games.filter(function(g){return g.done;}).length;
+
+  var tHead='<tr><th>Spiel</th>'+sess.players.map(function(p){return'<th>'+esc(p.n)+'</th>';}).join('')+'</tr>';
+  openPrintWin('🃏 Binockel Session – '+esc(sess.name), d+' · '+doneCount+' Spiele',
+    '<table><thead>'+tHead+'</thead><tbody>'+gameRows+'<tr class="tot"><td><strong>Gesamt</strong></td>'+totCells+'</tr></tbody></table>'+
+    '<h3>Finale Abrechnung <small>('+sess.pv.toString().replace('.',',')+' ct/Pkt)</small></h3>'+settleHtml);
+}
+
+function openPrintWin(title, sub, body) {
+  var w=window.open('','_blank','width=800,height=600');
+  if(!w){alert('Bitte Pop-ups erlauben, um das PDF zu öffnen.');return;}
+  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+title+'</title><style>'+
+    'body{font-family:system-ui,sans-serif;font-size:13px;color:#111;margin:0;padding:20px 24px;max-width:700px}'+
+    'h1{font-size:20px;margin-bottom:3px}p.sub{color:#888;font-size:12px;margin-bottom:18px}'+
+    'table{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:12px}'+
+    'th{background:#f2f2f2;padding:7px 8px;text-align:center;border:1px solid #ddd;font-size:11px;text-transform:uppercase;letter-spacing:.4px}'+
+    'td{padding:6px 8px;text-align:center;border:1px solid #e8e8e8}'+
+    'tr.rz td{background:#fafafe}tr.sp td{background:#f5faf5}'+
+    'tr.tot td{background:#f9f5e8;font-weight:600;border-top:2px solid #c9a84c}'+
+    '.pos{color:#2a7a35}.neg{color:#c0392b}.struck{text-decoration:line-through;color:#aaa}'+
+    'h3{font-size:14px;margin-bottom:10px;color:#333}h3 small{font-weight:400;color:#888;font-size:12px}'+
+    '.pay-line{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid #eee;border-radius:6px;margin-bottom:6px;background:#fafafa}'+
+    '.from{font-weight:500;min-width:80px}.arr{color:#999}.to{color:#c9a84c;font-weight:600;flex:1}.amt{font-weight:700;color:#2a7a35}'+
+    '@media print{body{padding:10px}@page{margin:15mm}}'+
+    '</style></head><body>'+
+    '<h1>'+title+'</h1><p class="sub">'+sub+'</p>'+body+
+    '</body></html>');
+  w.document.close();
+  setTimeout(function(){w.print();},400);
+}
+function doShare(text) {
+  if(navigator.share){navigator.share({text:text}).catch(function(){});}
+  else{
+    navigator.clipboard&&navigator.clipboard.writeText(text).then(function(){alert('In Zwischenablage kopiert!');}).catch(function(){
+      var t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);alert('Kopiert!');
+    });
+  }
+}
+
+function buildGameShareText(sess,g) {
+  var d=new Date(g.ts).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
+  var COL=7; var lines=[];
+  lines.push('🃏 Binockel – '+sess.name+' / '+g.name);
   lines.push('📅 '+d+' · '+g.rounds.length+' Runden');
   lines.push('');
-
-  // Column widths
-  var COL = 7;
-  var header = '      ';
-  g.players.forEach(function(p){
-    header += p.n.substring(0,COL).padStart(COL);
-  });
-  lines.push(header);
-  lines.push('─'.repeat(header.length));
-
+  var header='      ';
+  sess.players.forEach(function(p){header+=p.n.substring(0,COL).padStart(COL);});
+  lines.push(header); lines.push('─'.repeat(header.length));
   g.rounds.forEach(function(r,ri){
-    var rzLine = ('R'+(ri+1)+' Rz').padEnd(6);
-    var spLine = ('R'+(ri+1)+' Sp').padEnd(6);
-    g.players.forEach(function(p){
-      var rv = r.rz[p.id]; var sv = r.sp[p.id];
-      rzLine += (rv===undefined?'–':String(rv)).padStart(COL);
-      spLine += (sv===undefined?'–':String(sv)).padStart(COL);
+    var rzLine=('R'+(ri+1)+' Rz').padEnd(6);
+    var spLine=('R'+(ri+1)+' Sp').padEnd(6);
+    sess.players.forEach(function(p){
+      var spZ=r.sp[p.id]===0;
+      var rv=spZ?'(0)':r.rz[p.id]===undefined?'–':String(r.rz[p.id]);
+      var sv=r.sp[p.id]===undefined?'–':String(r.sp[p.id]);
+      rzLine+=rv.padStart(COL); spLine+=sv.padStart(COL);
     });
-    lines.push(rzLine);
-    lines.push(spLine);
+    lines.push(rzLine); lines.push(spLine);
   });
-
   lines.push('─'.repeat(header.length));
-  var tots = calcTotals(g);
-  var totLine = 'Σ     ';
-  g.players.forEach(function(p){
-    var t = tots[p.id]||0;
-    totLine += (t>0?'+':'')+t;
-    totLine = totLine.padEnd(6 + g.players.indexOf(p)*COL + COL);
-  });
-  // simpler total line
-  var totLine2 = '🏁 Gesamt: '+g.players.map(function(p){
-    var t=tots[p.id]||0; return p.n+': '+(t>0?'+':'')+t;
-  }).join(' | ');
-  lines.push(totLine2);
-
-  var ranked = g.players.map(function(p){return {n:p.n,t:tots[p.id]||0};}).sort(function(a,b){return b.t-a.t;});
-  var settle = calcSettle(ranked, g.pv);
-  if (settle.length>0) {
-    lines.push('');
-    lines.push('💰 Abrechnung ('+g.pv.toString().replace('.',',')+' ct/Pkt):');
-    settle.forEach(function(s){
-      lines.push('  '+s.from+' → '+s.to+': '+fmt(s.amt));
-    });
-  } else {
-    lines.push('');
-    lines.push('🎉 Alle gleich – keine Zahlungen!');
-  }
-  lines.push('');
-  lines.push('📱 Binockel App: https://888kyle.github.io/Binockel/');
+  var tots=calcTotals(g,sess.players);
+  lines.push('🏁 '+sess.players.map(function(p){var t=tots[p.id]||0;return p.n+': '+(t>0?'+':'')+t;}).join(' | '));
+  var ranked=sess.players.map(function(p){return {n:p.n,t:tots[p.id]||0};}).sort(function(a,b){return b.t-a.t;});
+  var settle=calcSettle(ranked,sess.pv);
+  if(settle.length>0){lines.push('');lines.push('💰 Abrechnung:');settle.forEach(function(s){lines.push('  '+s.from+' → '+s.to+': '+fmt(s.amt));});}
+  else{lines.push('');lines.push('🎉 Alle gleich!');}
+  lines.push('');lines.push('📱 Binockel: https://888kyle.github.io/Binockel/');
   return lines.join('\n');
 }
 
-function shareGameText(id) {
-  var text = buildShareText(id);
-  if (navigator.share) {
-    navigator.share({ text: text }).catch(function(){});
-  } else {
-    navigator.clipboard && navigator.clipboard.writeText(text).then(function(){
-      alert('Spielstand in Zwischenablage kopiert!');
-    }).catch(function(){
-      var t=document.createElement('textarea'); t.value=text;
-      document.body.appendChild(t); t.select(); document.execCommand('copy');
-      document.body.removeChild(t); alert('Spielstand kopiert!');
-    });
-  }
+function buildSessShareText(sess) {
+  var d=new Date(sess.ts).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
+  var lines=[];
+  lines.push('🃏 Binockel Session – '+sess.name);
+  lines.push('📅 '+d+' · '+sess.games.filter(function(g){return g.done;}).length+' Spiele beendet');
+  lines.push('');
+  var allTots={};
+  sess.players.forEach(function(p){allTots[p.id]=0;});
+  sess.games.forEach(function(g){
+    if(!g.done)return;
+    var gt=calcTotals(g,sess.players);
+    var row='  '+g.name+': '+sess.players.map(function(p){var t=gt[p.id]||0;allTots[p.id]+=t;return p.n+': '+(t>0?'+':'')+t;}).join(' | ');
+    lines.push(row);
+  });
+  lines.push('');
+  lines.push('🏁 Gesamt: '+sess.players.map(function(p){var t=allTots[p.id]||0;return p.n+': '+(t>0?'+':'')+t;}).join(' | '));
+  var ranked=sess.players.map(function(p){return {n:p.n,t:allTots[p.id]||0};}).sort(function(a,b){return b.t-a.t;});
+  var settle=calcSettle(ranked,sess.pv);
+  if(settle.length>0){lines.push('');lines.push('💰 Abrechnung ('+sess.pv.toString().replace('.',',')+' ct/Pkt):');settle.forEach(function(s){lines.push('  '+s.from+' → '+s.to+': '+fmt(s.amt));});}
+  else{lines.push('');lines.push('🎉 Alle gleich – keine Zahlungen!');}
+  lines.push('');lines.push('📱 Binockel: https://888kyle.github.io/Binockel/');
+  return lines.join('\n');
 }
 
 /* ===== CALC ===== */
-function calcTotals(g) {
+function calcTotals(g, players) {
   var t={};
-  g.players.forEach(function(p){t[p.id]=0;});
+  (players||[]).forEach(function(p){t[p.id]=0;});
   g.rounds.forEach(function(r){
-    g.players.forEach(function(p){
+    (players||[]).forEach(function(p){
+      // Feature 1: if sp===0, the whole round counts as 0 for this player
+      if(r.sp[p.id]===0){ /* contributes 0, skip */ return; }
       if(r.rz[p.id]!==undefined) t[p.id]+=r.rz[p.id];
       if(r.sp[p.id]!==undefined) t[p.id]+=r.sp[p.id];
     });
@@ -675,22 +983,25 @@ function calcTotals(g) {
 }
 
 function calcSettle(ranked, pv) {
-  // All losers pay the winner
   var w=ranked[0]; var res=[];
   for(var i=1;i<ranked.length;i++){
     var diff=w.t-ranked[i].t;
-    if(diff>0&&pv>0) res.push({from:ranked[i].n, to:w.n, amt:diff*pv});
+    if(diff>0&&pv>0) res.push({from:ranked[i].n,to:w.n,amt:diff*pv});
   }
   return res;
 }
 
 /* ===== OVERLAY ===== */
-function openOverlay(){ document.getElementById('overlay').classList.add('on'); }
+function openOverlay(){document.getElementById('overlay').classList.add('on');}
 function closeOverlay(){
   document.getElementById('overlay').classList.remove('on');
-  if(S.cur){ var g=cg(); if(g&&document.getElementById('s-game').classList.contains('on')){ renderGhdr(g); renderGbody(g); } }
+  // Re-render active screen without touching others
+  var onGame=document.getElementById('s-game').classList.contains('on');
+  var onSess=document.getElementById('s-session').classList.contains('on');
+  if(onGame){var sess=cs();var g=cg();if(sess&&g){renderGhdr(sess,g);renderGbody(sess,g);}}
+  if(onSess){var s=cs();if(s){renderSessionHdr(s);renderSessionGames(s);renderSessionFab(s);}}
 }
-function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeOverlay(); }
+function overlayClick(e){if(e.target===document.getElementById('overlay'))closeOverlay();}
 
 /* ===== INIT ===== */
 load(); home();
