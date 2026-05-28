@@ -84,11 +84,11 @@ input[type=number]{-moz-appearance:textfield}
 /* TABLE */
 .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .tbl{width:100%;border-collapse:collapse;font-size:13px}
-.tbl th{background:var(--surface);padding:10px 7px;text-align:center;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:2px solid var(--border);white-space:nowrap;position:sticky;top:0;z-index:5}
+.tbl th{background:#182b1c;padding:10px 7px;text-align:center;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:2px solid var(--border);white-space:nowrap;position:sticky;top:0;z-index:5;box-shadow:0 3px 8px rgba(0,0,0,.55)}
 .tbl th.p-col{min-width:70px}
 .tbl th.ans-col{width:46px}
 .tbl th.rd-col{width:30px}
-.tbl th.a-col{background:var(--gold-dim)!important;color:var(--gold)!important}
+.tbl th.a-col{background:#2d3d14!important;color:var(--gold)!important}
 .tbl td{padding:8px 6px;text-align:center;border-bottom:1px solid rgba(42,61,45,.5);vertical-align:middle}
 .tbl td.p-col{min-width:70px}
 .tbl td.a-col{background:var(--gold-glow)}
@@ -818,12 +818,6 @@ function confirmDeleteSession(id) {
   save(); closeOverlay(); home();
 }
 
-function pdfSessionById(id) {
-  var old=S.curSession; S.curSession=id;
-  pdfSession();
-  S.curSession=old;
-}
-
 /* ===== PDF EXPORT ===== */
 function pdfGame() {
   var sess=cs(); var g=cg(); if(!sess||!g)return;
@@ -831,7 +825,6 @@ function pdfGame() {
   var ranked=sess.players.map(function(p){return{n:p.n,t:tots[p.id]||0};}).sort(function(a,b){return b.t-a.t;});
   var settle=calcSettle(ranked,sess.pv);
   var d=new Date(g.ts).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
-
   var tHead='<tr><th>#</th><th>Ans.</th>'+sess.players.map(function(p){return'<th>'+esc(p.n)+'</th>';}).join('')+'</tr>';
   var tRows=g.rounds.map(function(r,ri){
     var rzCells=sess.players.map(function(p){
@@ -844,12 +837,10 @@ function pdfGame() {
     return'<tr class="rz"><td rowspan="2">'+(ri+1)+'</td><td>'+(r.ans!==undefined?r.ans:'–')+'</td>'+rzCells+'</tr>'+
            '<tr class="sp"><td><em>Sp</em></td>'+spCells+'</tr>';
   }).join('');
-  var totCells=sess.players.map(function(p){var t=tots[p.id]||0;return'<td class="'+(t>0?'pos':t<0?'neg':'')+'"><strong>'+(t>0?'+':'')+t+'</strong></td>';}).join('');
-
+  var totCells=sess.players.map(function(p){var t=tots[p.id]||0;return'<td class="'+(t>0?'pos':t<0?'neg':'')+'"><strong>'+(t>0?'+':'')+t+' Pkt</strong></td>';}).join('');
   var settleHtml=settle.length===0?'<p style="color:#666">Keine Zahlungen nötig.</p>':settle.map(function(s){
     return'<div class="pay-line"><span class="from">'+esc(s.from)+'</span><span class="arr">→</span><span class="to">'+esc(s.to)+'</span><span class="amt">'+fmt(s.amt)+'</span></div>';
   }).join('');
-
   openPrintWin('🃏 Binockel – '+esc(sess.name)+' / '+esc(g.name), d+' · '+g.rounds.length+' Runden',
     '<table><thead>'+tHead+'</thead><tbody>'+tRows+'<tr class="tot"><td colspan="2">Gesamt</td>'+totCells+'</tr></tbody></table>'+
     '<h3>Abrechnung <small>('+sess.pv.toString().replace('.',',')+' ct/Pkt)</small></h3>'+settleHtml);
@@ -863,10 +854,10 @@ function pdfSession() {
   sess.games.forEach(function(g){
     if(!g.done)return;
     var gt=calcTotals(g,sess.players);
-    var cells=sess.players.map(function(p){var t=gt[p.id]||0;allTots[p.id]+=t;return'<td class="'+(t>0?'pos':t<0?'neg':'')+'">'+( t>0?'+':'')+t+'</td>';}).join('');
+    var cells=sess.players.map(function(p){var t=gt[p.id]||0;allTots[p.id]+=t;return'<td class="'+(t>0?'pos':t<0?'neg':'')+'">'+( t>0?'+':'')+t+' Pkt</td>';}).join('');
     gameRows+='<tr><td>'+esc(g.name)+'</td>'+cells+'</tr>';
   });
-  var totCells=sess.players.map(function(p){var t=allTots[p.id]||0;return'<td class="'+(t>0?'pos':t<0?'neg':'')+'"><strong>'+(t>0?'+':'')+t+'</strong></td>';}).join('');
+  var totCells=sess.players.map(function(p){var t=allTots[p.id]||0;return'<td class="'+(t>0?'pos':t<0?'neg':'')+'"><strong>'+(t>0?'+':'')+t+' Pkt</strong></td>';}).join('');
   var ranked=sess.players.map(function(p){return{n:p.n,t:allTots[p.id]||0};}).sort(function(a,b){return b.t-a.t;});
   var settle=calcSettle(ranked,sess.pv);
   var settleHtml=settle.length===0?'<p style="color:#666">Keine Zahlungen nötig.</p>':settle.map(function(s){
@@ -874,21 +865,26 @@ function pdfSession() {
   }).join('');
   var d=new Date(sess.ts).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
   var doneCount=sess.games.filter(function(g){return g.done;}).length;
-
   var tHead='<tr><th>Spiel</th>'+sess.players.map(function(p){return'<th>'+esc(p.n)+'</th>';}).join('')+'</tr>';
   openPrintWin('🃏 Binockel Session – '+esc(sess.name), d+' · '+doneCount+' Spiele',
     '<table><thead>'+tHead+'</thead><tbody>'+gameRows+'<tr class="tot"><td><strong>Gesamt</strong></td>'+totCells+'</tr></tbody></table>'+
     '<h3>Finale Abrechnung <small>('+sess.pv.toString().replace('.',',')+' ct/Pkt)</small></h3>'+settleHtml);
 }
 
+function pdfSessionById(id) {
+  var old=S.curSession; S.curSession=id;
+  pdfSession();
+  S.curSession=old;
+}
+
 function openPrintWin(title, sub, body) {
-  var w=window.open('','_blank','width=800,height=600');
-  if(!w){alert('Bitte Pop-ups erlauben, um das PDF zu öffnen.');return;}
+  var w=window.open('','_blank');
+  if(!w){alert('Bitte Pop-ups erlauben.');return;}
   w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+title+'</title><style>'+
     'body{font-family:system-ui,sans-serif;font-size:13px;color:#111;margin:0;padding:20px 24px;max-width:700px}'+
     'h1{font-size:20px;margin-bottom:3px}p.sub{color:#888;font-size:12px;margin-bottom:18px}'+
     'table{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:12px}'+
-    'th{background:#f2f2f2;padding:7px 8px;text-align:center;border:1px solid #ddd;font-size:11px;text-transform:uppercase;letter-spacing:.4px}'+
+    'th{background:#1d2b20;color:#c9a84c;padding:7px 8px;text-align:center;border:1px solid #2a3d2d;font-size:11px;text-transform:uppercase;letter-spacing:.4px}'+
     'td{padding:6px 8px;text-align:center;border:1px solid #e8e8e8}'+
     'tr.rz td{background:#fafafe}tr.sp td{background:#f5faf5}'+
     'tr.tot td{background:#f9f5e8;font-weight:600;border-top:2px solid #c9a84c}'+
@@ -903,69 +899,7 @@ function openPrintWin(title, sub, body) {
   w.document.close();
   setTimeout(function(){w.print();},400);
 }
-function doShare(text) {
-  if(navigator.share){navigator.share({text:text}).catch(function(){});}
-  else{
-    navigator.clipboard&&navigator.clipboard.writeText(text).then(function(){alert('In Zwischenablage kopiert!');}).catch(function(){
-      var t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);alert('Kopiert!');
-    });
-  }
-}
 
-function buildGameShareText(sess,g) {
-  var d=new Date(g.ts).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
-  var COL=7; var lines=[];
-  lines.push('🃏 Binockel – '+sess.name+' / '+g.name);
-  lines.push('📅 '+d+' · '+g.rounds.length+' Runden');
-  lines.push('');
-  var header='      ';
-  sess.players.forEach(function(p){header+=p.n.substring(0,COL).padStart(COL);});
-  lines.push(header); lines.push('─'.repeat(header.length));
-  g.rounds.forEach(function(r,ri){
-    var rzLine=('R'+(ri+1)+' Rz').padEnd(6);
-    var spLine=('R'+(ri+1)+' Sp').padEnd(6);
-    sess.players.forEach(function(p){
-      var spZ=r.sp[p.id]===0;
-      var rv=spZ?'(0)':r.rz[p.id]===undefined?'–':String(r.rz[p.id]);
-      var sv=r.sp[p.id]===undefined?'–':String(r.sp[p.id]);
-      rzLine+=rv.padStart(COL); spLine+=sv.padStart(COL);
-    });
-    lines.push(rzLine); lines.push(spLine);
-  });
-  lines.push('─'.repeat(header.length));
-  var tots=calcTotals(g,sess.players);
-  lines.push('🏁 '+sess.players.map(function(p){var t=tots[p.id]||0;return p.n+': '+(t>0?'+':'')+t;}).join(' | '));
-  var ranked=sess.players.map(function(p){return {n:p.n,t:tots[p.id]||0};}).sort(function(a,b){return b.t-a.t;});
-  var settle=calcSettle(ranked,sess.pv);
-  if(settle.length>0){lines.push('');lines.push('💰 Abrechnung:');settle.forEach(function(s){lines.push('  '+s.from+' → '+s.to+': '+fmt(s.amt));});}
-  else{lines.push('');lines.push('🎉 Alle gleich!');}
-  lines.push('');lines.push('📱 Binockel: https://888kyle.github.io/Binockel/');
-  return lines.join('\n');
-}
-
-function buildSessShareText(sess) {
-  var d=new Date(sess.ts).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
-  var lines=[];
-  lines.push('🃏 Binockel Session – '+sess.name);
-  lines.push('📅 '+d+' · '+sess.games.filter(function(g){return g.done;}).length+' Spiele beendet');
-  lines.push('');
-  var allTots={};
-  sess.players.forEach(function(p){allTots[p.id]=0;});
-  sess.games.forEach(function(g){
-    if(!g.done)return;
-    var gt=calcTotals(g,sess.players);
-    var row='  '+g.name+': '+sess.players.map(function(p){var t=gt[p.id]||0;allTots[p.id]+=t;return p.n+': '+(t>0?'+':'')+t;}).join(' | ');
-    lines.push(row);
-  });
-  lines.push('');
-  lines.push('🏁 Gesamt: '+sess.players.map(function(p){var t=allTots[p.id]||0;return p.n+': '+(t>0?'+':'')+t;}).join(' | '));
-  var ranked=sess.players.map(function(p){return {n:p.n,t:allTots[p.id]||0};}).sort(function(a,b){return b.t-a.t;});
-  var settle=calcSettle(ranked,sess.pv);
-  if(settle.length>0){lines.push('');lines.push('💰 Abrechnung ('+sess.pv.toString().replace('.',',')+' ct/Pkt):');settle.forEach(function(s){lines.push('  '+s.from+' → '+s.to+': '+fmt(s.amt));});}
-  else{lines.push('');lines.push('🎉 Alle gleich – keine Zahlungen!');}
-  lines.push('');lines.push('📱 Binockel: https://888kyle.github.io/Binockel/');
-  return lines.join('\n');
-}
 
 /* ===== CALC ===== */
 function calcTotals(g, players) {
