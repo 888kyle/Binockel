@@ -375,10 +375,31 @@ function renderSessionGames(sess) {
       var t=gt[p.id]||0; var cls=t>0?'pos':t<0?'neg':'z';
       return '<span class="gb-score '+cls+'">'+esc(p.n)+': '+(t>0?'+':'')+t+' Pkt</span>';
     }).join('');
+
+    var settleSection = '';
+    if (g.done) {
+      var gRanked = sess.players.map(function(p){return{n:p.n,t:gt[p.id]||0};}).sort(function(a,b){return b.t-a.t;});
+      var gSettle = calcSettle(gRanked, sess.pv);
+      if (gSettle.length > 0) {
+        settleSection = '<div style="margin-top:8px;border-top:1px solid var(--border);padding-top:8px;display:flex;flex-direction:column;gap:4px">' +
+          gSettle.map(function(s){
+            return '<div style="display:flex;align-items:center;gap:6px;font-size:12px">' +
+              '<span style="color:var(--cream2)">'+esc(s.from)+'</span>' +
+              '<span style="color:var(--muted)">→</span>' +
+              '<span style="color:var(--gold)">'+esc(s.to)+'</span>' +
+              '<span style="margin-left:auto;font-weight:600;color:var(--green)">'+fmt(s.amt)+'</span>' +
+              '</div>';
+          }).join('') + '</div>';
+      } else {
+        settleSection = '<div style="margin-top:7px;font-size:12px;color:var(--muted)">🎉 Alle gleich</div>';
+      }
+    }
+
     return '<div class="gcard'+(g.done?' done':'')+'" onclick="openGameInSession(\''+g.id+'\')">' +
       '<div class="gcard-top"><div class="gcard-name">'+esc(g.name)+'</div>'+badge+'</div>' +
       '<div class="gcard-info"><span>🎴 '+g.rounds.length+' Runden</span></div>' +
       '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">'+scores+'</div>' +
+      settleSection +
       '</div>';
   }).join('');
 
@@ -917,10 +938,14 @@ function calcTotals(g, players) {
 }
 
 function calcSettle(ranked, pv) {
-  var w=ranked[0]; var res=[];
-  for(var i=1;i<ranked.length;i++){
-    var diff=w.t-ranked[i].t;
-    if(diff>0&&pv>0) res.push({from:ranked[i].n,to:w.n,amt:diff*pv});
+  // Everyone pays the winner the difference in points × pv
+  var winner = ranked[0];
+  var res = [];
+  for (var i = 1; i < ranked.length; i++) {
+    var diff = winner.t - ranked[i].t;
+    if (diff > 0 && pv > 0) {
+      res.push({ from: ranked[i].n, to: winner.n, amt: Math.round(diff * pv * 10) / 10 });
+    }
   }
   return res;
 }
