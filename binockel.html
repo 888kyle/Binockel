@@ -405,7 +405,7 @@ function renderSessionGames(sess) {
 
   // Running total + live settlement
   var allRanked = sess.players.map(function(p){return{n:p.n,t:allTots[p.id]||0,id:p.id};}).sort(function(a,b){return b.t-a.t;});
-  var liveSettle = calcSettle(allRanked, sess.pv);
+  var liveSettle = calcSessionSettle(sess);
   var settleHtml = '';
   if (liveSettle.length > 0) {
     settleHtml = '<div style="margin-top:10px;border-top:1px solid var(--border);padding-top:10px;display:flex;flex-direction:column;gap:5px">' +
@@ -798,7 +798,7 @@ function showSessSum() {
       '</div><div class="rname">'+esc(p.n)+'</div><div class="rscore '+cls+'">'+
       (p.t>0?'+':'')+p.t+' Pkt</div></div>';
   }).join('');
-  var settle=calcSettle(ranked,sess.pv);
+  var settle=calcSessionSettle(sess);
   var payHtml=settle.length===0
     ? '<div class="nopay">Alle gleich – keine Zahlungen 🎉</div>'
     : settle.map(function(s){
@@ -880,7 +880,7 @@ function pdfSession() {
   });
   var totCells=sess.players.map(function(p){var t=allTots[p.id]||0;return'<td class="'+(t>0?'pos':t<0?'neg':'')+'"><strong>'+(t>0?'+':'')+t+' Pkt</strong></td>';}).join('');
   var ranked=sess.players.map(function(p){return{n:p.n,t:allTots[p.id]||0};}).sort(function(a,b){return b.t-a.t;});
-  var settle=calcSettle(ranked,sess.pv);
+  var settle=calcSessionSettle(sess);
   var settleHtml=settle.length===0?'<p style="color:#666">Keine Zahlungen nötig.</p>':settle.map(function(s){
     return'<div class="pay-line"><span class="from">'+esc(s.from)+'</span><span class="arr">→</span><span class="to">'+esc(s.to)+'</span><span class="amt">'+fmt(s.amt)+'</span></div>';
   }).join('');
@@ -938,7 +938,7 @@ function calcTotals(g, players) {
 }
 
 function calcSettle(ranked, pv) {
-  // Everyone pays the winner the difference in points × pv
+  // Per-game: everyone pays the winner the difference in points × pv
   var winner = ranked[0];
   var res = [];
   for (var i = 1; i < ranked.length; i++) {
@@ -948,6 +948,54 @@ function calcSettle(ranked, pv) {
     }
   }
   return res;
+}
+
+function calcSessionSettle(sess) {
+  // Session-wide settlement: accumulates all per-game pairwise debts, then nets them.
+  // This correctly captures debts between non-overall-winners (e.g. S2 still owes S1
+  // from a game where S1 won, even if S3 is the overall session winner).
+  if (!sess || sess.pv <= 0) return [];
+
+  // net[from_id][to_id] = cumulative amount 'from' owes 'to' (same units as calcSettle amt)
+  var net = {};
+  sess.players.forEach(function(p) {
+    net[p.id] = {};
+    sess.players.forEach(function(q) { net[p.id][q.id] = 0; });
+  });
+
+  // Replay each completed game with the per-game winner-takes-all logic
+  sess.games.forEach(function(g) {
+    if (!g.done) return;
+    var gt = calcTotals(g, sess.players);
+    var gRanked = sess.players.map(function(p) {
+      return { id: p.id, n: p.n, t: gt[p.id] || 0 };
+    }).sort(function(a, b) { return b.t - a.t; });
+
+    var winner = gRanked[0];
+    for (var i = 1; i < gRanked.length; i++) {
+      var diff = winner.t - gRanked[i].t;
+      if (diff > 0) {
+        var amt = Math.round(diff * sess.pv * 10) / 10;
+        net[gRanked[i].id][winner.id] = Math.round((net[gRanked[i].id][winner.id] + amt) * 10) / 10;
+      }
+    }
+  });
+
+  // For every player pair, compute the net direction and amount
+  var result = [];
+  for (var i = 0; i < sess.players.length; i++) {
+    for (var j = i + 1; j < sess.players.length; j++) {
+      var pi = sess.players[i];
+      var pj = sess.players[j];
+      var netIJ = Math.round((net[pi.id][pj.id] - net[pj.id][pi.id]) * 10) / 10;
+      if (netIJ > 0.05) {
+        result.push({ from: pi.n, to: pj.n, amt: netIJ });
+      } else if (netIJ < -0.05) {
+        result.push({ from: pj.n, to: pi.n, amt: Math.round(-netIJ * 10) / 10 });
+      }
+    }
+  }
+  return result;
 }
 
 /* ===== OVERLAY ===== */
