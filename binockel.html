@@ -951,24 +951,24 @@ function calcSettle(ranked, pv) {
 }
 
 function calcSessionSettle(sess) {
-  // Session-wide settlement: accumulates all per-game pairwise debts, then nets them.
-  // This correctly captures debts between non-overall-winners (e.g. S2 still owes S1
-  // from a game where S1 won, even if S3 is the overall session winner).
+  // Session settlement based on per-game debts:
+  // 1. For each finished game: compute who owes whom (winner-takes-all per game)
+  // 2. Accumulate all debts in a pairwise net matrix
+  // 3. For each player pair: subtract reverse debts -> one clean net payment direction
   if (!sess || sess.pv <= 0) return [];
 
-  // net[from_id][to_id] = cumulative amount 'from' owes 'to' (same units as calcSettle amt)
+  // net[debtor_id][creditor_id] = total amount debtor owes creditor across all games (in ct)
   var net = {};
   sess.players.forEach(function(p) {
     net[p.id] = {};
     sess.players.forEach(function(q) { net[p.id][q.id] = 0; });
   });
 
-  // Replay each completed game with the per-game winner-takes-all logic
   sess.games.forEach(function(g) {
     if (!g.done) return;
     var gt = calcTotals(g, sess.players);
     var gRanked = sess.players.map(function(p) {
-      return { id: p.id, n: p.n, t: gt[p.id] || 0 };
+      return { id: p.id, t: gt[p.id] || 0 };
     }).sort(function(a, b) { return b.t - a.t; });
 
     var winner = gRanked[0];
@@ -976,22 +976,23 @@ function calcSessionSettle(sess) {
       var diff = winner.t - gRanked[i].t;
       if (diff > 0) {
         var amt = Math.round(diff * sess.pv * 10) / 10;
-        net[gRanked[i].id][winner.id] = Math.round((net[gRanked[i].id][winner.id] + amt) * 10) / 10;
+        net[gRanked[i].id][winner.id] =
+          Math.round((net[gRanked[i].id][winner.id] + amt) * 10) / 10;
       }
     }
   });
 
-  // For every player pair, compute the net direction and amount
+  // For each unique player pair: net out mutual debts -> one payment in the net direction
   var result = [];
   for (var i = 0; i < sess.players.length; i++) {
     for (var j = i + 1; j < sess.players.length; j++) {
       var pi = sess.players[i];
       var pj = sess.players[j];
-      var netIJ = Math.round((net[pi.id][pj.id] - net[pj.id][pi.id]) * 10) / 10;
-      if (netIJ > 0.05) {
-        result.push({ from: pi.n, to: pj.n, amt: netIJ });
-      } else if (netIJ < -0.05) {
-        result.push({ from: pj.n, to: pi.n, amt: Math.round(-netIJ * 10) / 10 });
+      var netVal = Math.round((net[pi.id][pj.id] - net[pj.id][pi.id]) * 10) / 10;
+      if (netVal > 0.05) {
+        result.push({ from: pi.n, to: pj.n, amt: netVal });
+      } else if (netVal < -0.05) {
+        result.push({ from: pj.n, to: pi.n, amt: Math.round(-netVal * 10) / 10 });
       }
     }
   }
